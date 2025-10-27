@@ -13,4 +13,8 @@ export class AuthorService {
   public async createAuthor(author: CreateAuthorModel): Promise<AuthorModel> {
     return this.authorRepository.createAuthor(author);
   }
+  public async getBookById(id: string): Promise<AuthorModel | undefined> {
+      return this.authorRepository.getAuthorById(id);
+    }
+
 }
