@@ -8,4 +8,7 @@ export type AuthorModel = {
 export type CreateAuthorModel = {
   firstName: string;
   lastName: string;
+  authorId: string;
 };
+
+export type UpdateAuthorModel = Partial<CreateAuthorModel>
