@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useBookProvider } from '../providers/useBookProvider'
 import { BookListItem } from './BookListItem'
 import { CreateBookModal } from './CreateBookModal'
-import { Input } from 'antd'
+import { Input, Skeleton } from 'antd'
 export function BookList() {
-  const { books, loadBooks, deleteBook, updateBook, createBook } =
+  const { books, loading, loadBooks, deleteBook, updateBook, createBook } =
     useBookProvider()
 
 
@@ -25,14 +25,17 @@ export function BookList() {
         />
       <CreateBookModal onCreate={createBook} />
       <div style={{ padding: '0 .5rem' }}>
-        {filteredBooks.map(book => (
+        {loading? (
+          <Skeleton active/>
+        ) : (
+        filteredBooks.map(book => (
           <BookListItem
             key={book.id}
             book={book}
             onDelete={deleteBook}
             onUpdate={updateBook}
           />
-        ))}
+        )))}
       </div>
     </>
   )

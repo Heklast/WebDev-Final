@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { useBookAuthorsProviders } from "../../providers/useBookAuthorsProviders"
 import {AuthorListItem} from "./AuthorListItem"
 import { CreateAuthorModal } from "./CreateAuthorModal";
+import { Skeleton } from 'antd'
 
 export function AuthorList(){
-    const {authors, loadAuthors, createAuthor, deleteAuthor, updateAuthor}= useBookAuthorsProviders();
+    const {authors, loading, loadAuthors, createAuthor, deleteAuthor, updateAuthor}= useBookAuthorsProviders();
 
     useEffect(()=>{
     loadAuthors()},[])
@@ -13,7 +14,9 @@ export function AuthorList(){
         <>
         <CreateAuthorModal onCreate={createAuthor} />
         <div style={{ padding: '5rem' }}>
-        {authors.map(author=>
+        {loading ? (<Skeleton active />
+        ) : (
+        authors.map(author=>
             <AuthorListItem
                 key={author.id}
                 author={author}
@@ -21,7 +24,7 @@ export function AuthorList(){
                 onUpdate={updateAuthor}
                   />
                 
-)}</div>
+))}</div>
         
         </>
     )
