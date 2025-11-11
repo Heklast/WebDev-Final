@@ -7,6 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AuthorEntity, type AuthorId } from '../../authors/author.entity';
+import { OneToMany } from 'typeorm';
+import { SaleEntity } from '../../sales/entities/sale.entity';
 
 export type BookId = string & { __brand: 'Book' };
 
@@ -27,4 +29,11 @@ export class BookEntity extends BaseEntity {
   @ManyToOne(() => AuthorEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'author_id' })
   author: AuthorEntity;
+
+  @OneToMany(() => SaleEntity, (sale) => sale.book)
+  sales: SaleEntity[];
+
+  @Column({ name: 'picture_url', type: 'varchar', nullable: true })
+  pictureUrl?: string;
+
 }
