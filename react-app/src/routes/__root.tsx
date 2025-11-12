@@ -1,12 +1,23 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { Layout } from '../Layout'
 
-const RootLayout = () => {
-  return (
-    <Layout>
-      <Outlet />
-    </Layout>
-  )
-}
+// Clients routes
+import { clientsRoute } from './clients'
+import { clientDetailsRoute } from './clients.$clientId'
 
-export const Route = createRootRoute({ component: RootLayout })
+// Import your original index route (default page)
+import { Route as IndexRoute } from './index'
+
+const RootLayout = () => (
+  <Layout>
+    <Outlet />
+  </Layout>
+)
+
+export const rootRoute = createRootRoute({ component: RootLayout })
+
+export const routeTree = rootRoute._addFileChildren({
+  IndexRoute,           // ✅ Default page
+  clientsRoute,
+  clientDetailsRoute,
+})
