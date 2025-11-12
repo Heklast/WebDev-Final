@@ -13,10 +13,10 @@ interface BookSalesModalProps {
 
 export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
   const [open, setOpen] = useState(false)
-  const [clientId, setClientId] = useState<string>('')            
+  const [clientId, setClientId] = useState<string>('')
   const [date, setDate] = useState<string>('')
 
-  const { clients, loadClients } = useClientProvider()            
+  const { clients, loadClients } = useClientProvider()
   const { createSale } = useSalesProvider()
 
   const onClose = () => {
@@ -34,7 +34,7 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
   const onOk = async () => {
     await createSale({
       bookId,
-      clientId,                                                
+      clientId,
       date: new Date(date).toISOString(),
     })
     onClose()
@@ -43,7 +43,11 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
 
   return (
     <>
-      <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpen(true)}>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={() => setOpen(true)}
+      >
         Create Sale
       </Button>
       <Modal
@@ -54,20 +58,22 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
         title="Create Sale"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Select<string>                                         
+          <Select<string>
             style={{ width: '100%' }}
             placeholder="Select a client"
-            options={clients.map((c: ClientModel) => ({           
+            options={clients.map((c: ClientModel) => ({
               label: `${c.firstName} ${c.lastName}`,
-              value: c.id,                                        
+              value: c.id,
             }))}
             value={clientId || undefined}
-            onChange={(value: string) => setClientId(value)}      
+            onChange={(value: string) => setClientId(value)}
           />
           <DatePicker
             style={{ width: '100%' }}
             onChange={(_, dateString) =>
-              setDate(Array.isArray(dateString) ? (dateString[0] ?? '') : dateString)
+              setDate(
+                Array.isArray(dateString) ? (dateString[0] ?? '') : dateString,
+              )
             }
           />
         </Space>

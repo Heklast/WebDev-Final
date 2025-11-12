@@ -2,9 +2,13 @@ import type { AuthorModel, UpdateAuthorModel } from '../../AuthorModel'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Button, Col, Row } from 'antd'
-import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from '@ant-design/icons'
 import { Modal } from 'antd'
-
 
 export interface AuthorListItemParams {
   author: AuthorModel
@@ -12,7 +16,11 @@ export interface AuthorListItemParams {
   onUpdate: (id: string, input: UpdateAuthorModel) => void
 }
 
-export function AuthorListItem({ author, onDelete, onUpdate }: AuthorListItemParams) {
+export function AuthorListItem({
+  author,
+  onDelete,
+  onUpdate,
+}: AuthorListItemParams) {
   const [firstName, setFirstName] = useState(author.firstName)
   const [lastName, setLastName] = useState(author.lastName)
   const [isEditing, setIsEditing] = useState(false)
@@ -28,7 +36,6 @@ export function AuthorListItem({ author, onDelete, onUpdate }: AuthorListItemPar
     setIsEditing(false)
   }
   return (
-
     <Row
       style={{
         width: '100%',
@@ -44,8 +51,15 @@ export function AuthorListItem({ author, onDelete, onUpdate }: AuthorListItemPar
       <Col span={12} style={{ margin: 'auto 0' }}>
         {isEditing ? (
           <>
-            <input value={firstName} onChange={e => setFirstName(e.target.value)} />
-            <input value={lastName} onChange={e => setLastName(e.target.value)} /></>
+            <input
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+            />
+            <input
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+            />
+          </>
         ) : (
           <Link
             to={`/authors/$authorId`}
@@ -82,14 +96,18 @@ export function AuthorListItem({ author, onDelete, onUpdate }: AuthorListItemPar
             <EditOutlined />
           </Button>
         )}
-        <Button type="primary" danger onClick={() => 
-          Modal.confirm({
-            title: 'Delete Author?',
-            content: `This will delete "${author.firstName} ${author.lastName}".`,
-            okType: 'danger',
-            onOk: () => onDelete(author.id),
-          })
-        }>
+        <Button
+          type="primary"
+          danger
+          onClick={() =>
+            Modal.confirm({
+              title: 'Delete Author?',
+              content: `This will delete "${author.firstName} ${author.lastName}".`,
+              okType: 'danger',
+              onOk: () => onDelete(author.id),
+            })
+          }
+        >
           <DeleteOutlined />
         </Button>
       </Col>

@@ -87,14 +87,18 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
             <EditOutlined />
           </Button>
         )}
-        <Button type="primary" danger onClick={() => 
-        Modal.confirm({
-          title: 'Delete book?',
-          content: `This will delete "${book.title}".`,
-          okType: 'danger',
-          onOk: () => onDelete(book.id),
-        })
-      }>
+        <Button
+          type="primary"
+          danger
+          onClick={() =>
+            Modal.confirm({
+              title: 'Delete book?',
+              content: `This will delete "${book.title}".`,
+              okType: 'danger',
+              onOk: () => onDelete(book.id),
+            })
+          }
+        >
           <DeleteOutlined />
         </Button>
       </Col>

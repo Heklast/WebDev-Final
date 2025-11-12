@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
-import { useClientProvider } from '../hooks/useClientProvider'
-import type { ClientModel } from '../../models/client'
+import { useClientProvider } from '../providers/useClientProvider'
+import type { ClientModel } from '../ClientModel'
 
 export const ClientsPage: React.FC = () => {
   const { clients } = useClientProvider()

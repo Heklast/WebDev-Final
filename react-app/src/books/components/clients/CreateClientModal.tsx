@@ -1,6 +1,6 @@
 import { Modal, Input, Form } from 'antd'
 import { useState } from 'react'
-import type { CreateClientModel } from '@/models/client'
+import type { CreateClientModel } from '@/books/ClientModel'
 
 interface Props {
   onCreate: (input: CreateClientModel) => void
@@ -25,13 +25,24 @@ export function CreateClientModal({ onCreate }: Props) {
         open={open}
         onOk={handleOk}
         onCancel={() => setOpen(false)}
-        okButtonProps={{ disabled: !form.getFieldValue('firstName') || !form.getFieldValue('lastName') }}
+        okButtonProps={{
+          disabled:
+            !form.getFieldValue('firstName') || !form.getFieldValue('lastName'),
+        }}
       >
         <Form form={form} layout="vertical">
-          <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
+          <Form.Item
+            name="firstName"
+            label="First Name"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}>
+          <Form.Item
+            name="lastName"
+            label="Last Name"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item name="email" label="Email">

@@ -20,7 +20,7 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
   }
 
   useEffect(() => {
-   // const [firstName, setFirstName] = useState('')
+    // const [firstName, setFirstName] = useState('')
   }, [isOpen])
 
   return (
@@ -53,7 +53,7 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
           />
-          
+
           <Input
             type="text"
             placeholder="Last Name"

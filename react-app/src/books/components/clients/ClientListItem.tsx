@@ -1,7 +1,7 @@
 import { Button, Input } from 'antd'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import type { ClientModel, UpdateClientModel } from '@/models/client'
+import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
 
 interface Props {
   client: ClientModel
@@ -25,10 +25,22 @@ export function ClientListItem({ client, onDelete, onUpdate }: Props) {
   if (editing) {
     return (
       <div className="flex gap-2">
-        <Input value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
-        <Input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
-        <Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="(optional)" />
-        <Button type="primary" onClick={handleSave}>Save</Button>
+        <Input
+          value={form.firstName}
+          onChange={e => setForm({ ...form, firstName: e.target.value })}
+        />
+        <Input
+          value={form.lastName}
+          onChange={e => setForm({ ...form, lastName: e.target.value })}
+        />
+        <Input
+          value={form.email}
+          onChange={e => setForm({ ...form, email: e.target.value })}
+          placeholder="(optional)"
+        />
+        <Button type="primary" onClick={handleSave}>
+          Save
+        </Button>
         <Button onClick={() => setEditing(false)}>Cancel</Button>
       </div>
     )
@@ -36,14 +48,13 @@ export function ClientListItem({ client, onDelete, onUpdate }: Props) {
 
   return (
     <div className="flex items-center gap-2">
-      <Link
-        to="/clients/$clientId"
-        params={{ clientId: client.id }}
-      >
+      <Link to="/clients/$clientId" params={{ clientId: client.id }}>
         {client.firstName} {client.lastName}
       </Link>
       <Button onClick={() => setEditing(true)}>Edit</Button>
-      <Button danger onClick={() => onDelete(client.id)}>Delete</Button>
+      <Button danger onClick={() => onDelete(client.id)}>
+        Delete
+      </Button>
     </div>
   )
 }

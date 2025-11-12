@@ -8,7 +8,6 @@ import { BookSalesModal } from './BookSalesModal'
 import { useSalesProvider } from '../providers/useSalesProvider'
 import type { SaleModel } from '../SaleModel'
 
-
 interface BookDetailsProps {
   id: string
 }
@@ -23,11 +22,11 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     loadBook()
 
     loadBookSales(id)
-    .then(res => {
-      const data = (res.data as any).data ?? res.data
-      setSales(data as SaleModel[])
-    })
-    .catch(() => setSales([]))
+      .then(res => {
+        const data = (res.data as any).data ?? res.data
+        setSales(data as SaleModel[])
+      })
+      .catch(() => setSales([]))
   }, [id])
 
   if (isLoading) {
@@ -42,7 +41,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
       <Typography.Title level={1}>{book?.title}</Typography.Title>
       <Typography.Title level={3}>{book?.yearPublished}</Typography.Title>
 
-       <BookSalesModal
+      <BookSalesModal
         bookId={id}
         onCreated={() => {
           loadBookSales(id)
@@ -60,13 +59,13 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
           <ul style={{ paddingLeft: '1rem' }}>
             {sales.map(s => (
               <li key={s.id}>
-                <span>{new Date(s.date).toLocaleString()}</span> — client #{s.clientId}
+                <span>{new Date(s.date).toLocaleString()}</span> — client #
+                {s.clientId}
               </li>
             ))}
           </ul>
         </div>
       ) : null}
-
     </Space>
   )
 }
