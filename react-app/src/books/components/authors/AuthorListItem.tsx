@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Button, Col, Row } from 'antd'
 import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Modal } from 'antd'
 
 
 export interface AuthorListItemParams {
@@ -81,7 +82,14 @@ export function AuthorListItem({ author, onDelete, onUpdate }: AuthorListItemPar
             <EditOutlined />
           </Button>
         )}
-        <Button type="primary" danger onClick={() => onDelete(author.id)}>
+        <Button type="primary" danger onClick={() => 
+          Modal.confirm({
+            title: 'Delete Author?',
+            content: `This will delete "${author.firstName} ${author.lastName}".`,
+            okType: 'danger',
+            onOk: () => onDelete(author.id),
+          })
+        }>
           <DeleteOutlined />
         </Button>
       </Col>

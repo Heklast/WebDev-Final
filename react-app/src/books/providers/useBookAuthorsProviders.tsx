@@ -4,14 +4,17 @@ import type { AuthorModel, CreateAuthorModel, UpdateAuthorModel } from '../Autho
 
 export const useBookAuthorsProviders = () => {
   const [authors, setAuthors] = useState<AuthorModel[]>([])
+  const [loading, setLoading] = useState(false)
 
   const loadAuthors = () => {
+    setLoading(true)
     axios
       .get('http://localhost:3000/authors')
       .then(data => {
         setAuthors(data.data)
       })
       .catch(err => console.error(err))
+      .finally(() => setLoading(false))
   }
 
   const createAuthor = (author:CreateAuthorModel) => {
@@ -41,5 +44,5 @@ export const useBookAuthorsProviders = () => {
       .catch(err => console.error(err))
   }
 
-  return { authors, loadAuthors, createAuthor, deleteAuthor, updateAuthor }
+  return { authors, loading, loadAuthors, createAuthor, deleteAuthor, updateAuthor }
 }
