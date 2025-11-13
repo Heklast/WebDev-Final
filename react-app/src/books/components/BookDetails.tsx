@@ -25,12 +25,16 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
 
   useEffect(() => {
     loadBook()
-
+    
+    // reset sales when book changes
+    setSales([])
     setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
         const data = unwrapApiResponse(res.data) as SaleModel[]
-        setSales(data)
+        // filter to ensure only this book's sales
+        const filteredData = data.filter((s: SaleModel) => s.bookId === id)
+        setSales(filteredData)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
@@ -43,7 +47,9 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     loadBookSales(id)
       .then(res => {
         const data = unwrapApiResponse(res.data) as SaleModel[]
-        setSales(data)
+        // filter to ensure only this book's sales
+        const filteredData = data.filter((s: SaleModel) => s.bookId === id)
+        setSales(filteredData)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
@@ -151,7 +157,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
           </div>
 
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales.filter((s: SaleModel) => book !=null ? s.bookId === book.id : "book is null").map((s: SaleModel) => {
+            {sales.map((s: SaleModel) => {
               const client = resolveClient(s.clientId)
               const label = client
                 ? `${client.firstName} ${client.lastName}`
