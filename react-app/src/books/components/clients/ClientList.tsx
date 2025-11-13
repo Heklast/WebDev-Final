@@ -18,9 +18,7 @@ export function ClientList() {
   const { loadAllSales } = useSalesProvider()
   const [salesCount, setSalesCount] = useState<Record<string, number>>({})
 
-  useEffect(()=> {
-    loadClients()
-    // load sales once and compute counts per client
+  const refreshSales = () => {
     loadAllSales()
       .then(res => {
         const sales = unwrapApiResponse(res.data)
@@ -31,6 +29,14 @@ export function ClientList() {
         setSalesCount(counts)
       })
       .catch(() => setSalesCount({}))
+  }
+
+  useEffect(()=> {
+    loadClients()
+    refreshSales()
+    // refresh every 5 seconds to catch new sales
+    const interval = setInterval(refreshSales, 5000)
+    return () => clearInterval(interval)
   }, [loadClients])
 
   return (

@@ -16,8 +16,7 @@ export function BookList() {
   const { loadAllSales } = useSalesProvider()
   const [salesCount, setSalesCount] = useState<Record<string, number>>({})
 
-  // load sales once and compute counts per book
-  useEffect(() => {
+  const refreshSales = () => {
     loadAllSales()
       .then(res => {
         const sales = unwrapApiResponse(res.data) as any[]
@@ -28,7 +27,15 @@ export function BookList() {
         setSalesCount(counts)
       })
       .catch(() => setSalesCount({}))
-  }, [loadAllSales])
+  }
+
+  // load sales once and compute counts per book
+  useEffect(() => {
+    refreshSales()
+    // refresh every 5 seconds to catch new sales
+    const interval = setInterval(refreshSales, 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   const [query, setQuery] = useState<string>('')
   const filteredBooks = books.filter(b =>

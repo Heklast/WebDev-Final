@@ -27,13 +27,7 @@ export function AuthorList() {
   const { loadAllSales } = useSalesProvider()
   const [authorStats, setAuthorStats] = useState<Record<string, AuthorStats>>({})
 
-  useEffect(() => {
-    loadAuthors()
-  }, [])
-
-  useEffect(() => {
-    loadBooks()
-    // compute stats when books and sales are available
+  const computeAuthorStats = () => {
     loadAllSales()
       .then(res => {
         const sales = unwrapApiResponse(res.data) as any[]
@@ -61,6 +55,14 @@ export function AuthorList() {
         setAuthorStats(finalStats)
       })
       .catch(() => setAuthorStats({}))
+  }
+
+  useEffect(() => {
+    loadBooks()
+    computeAuthorStats()
+    // refresh every 5 seconds to catch new sales
+    const interval = setInterval(computeAuthorStats, 5000)
+    return () => clearInterval(interval)
   }, [books])
 
   return (
