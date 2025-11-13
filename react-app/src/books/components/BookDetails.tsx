@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Skeleton, Space, Typography } from 'antd'
+import { Skeleton, Space, Typography, Tag } from 'antd'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Route as booksRoute } from '../../routes/books'
@@ -83,7 +83,16 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
       ) : null}
 
       <Typography.Title level={1} style={{ marginBottom: 0 }}>{book?.title}</Typography.Title>
-      <Typography.Title level={3} style={{ color: '#1d4ed8' }}>{book?.yearPublished}</Typography.Title>
+      <Typography.Title level={3} style={{ color: '#1d4ed8', marginBottom: 0 }}>{book?.yearPublished}</Typography.Title>
+
+      {/* total sold indicator */}
+      <div style={{ marginTop: '0.5rem' }}>
+        {isSalesLoading && sales.length === 0 ? (
+          <Skeleton.Input style={{ width: 100 }} active />
+        ) : (
+          <Tag color="blue">{sales.length} sold</Tag>
+        )}
+      </div>
 
       <BookSalesModal bookId={id} onCreated={handleReloadSales}/>
 
