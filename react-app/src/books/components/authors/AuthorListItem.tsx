@@ -1,14 +1,13 @@
 import type { AuthorModel, UpdateAuthorModel } from '../../AuthorModel'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Modal } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons'
-import { Modal } from 'antd'
 
 export interface AuthorListItemParams {
   author: AuthorModel
@@ -24,6 +23,7 @@ export function AuthorListItem({
   const [firstName, setFirstName] = useState(author.firstName)
   const [lastName, setLastName] = useState(author.lastName)
   const [isEditing, setIsEditing] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -36,6 +36,7 @@ export function AuthorListItem({
     setIsEditing(false)
   }
   return (
+ <>
     <Row
       style={{
         width: '100%',
@@ -98,19 +99,29 @@ export function AuthorListItem({
         )}
         <Button
           type="primary"
-          danger
-          onClick={() =>
-            Modal.confirm({
-              title: 'Delete Author?',
-              content: `This will delete "${author.firstName} ${author.lastName}".`,
-              okType: 'danger',
-              onOk: () => onDelete(author.id),
-            })
-          }
-        >
-          <DeleteOutlined />
+  danger
+  onClick={() =>
+    setIsDeleteOpen(true)
+  }
+>
+  <DeleteOutlined />
         </Button>
       </Col>
     </Row>
+
+     <Modal
+        open={isDeleteOpen}
+        title="Delete author"
+        onCancel={() => setIsDeleteOpen(false)}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+        onOk={() => {
+          onDelete(author.id)
+          setIsDeleteOpen(false)
+        }}
+      >
+        Are you sure you want to delete "{author.firstName} {author.lastName}"?
+      </Modal>  </>
   )
 }

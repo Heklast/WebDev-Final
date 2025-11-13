@@ -19,6 +19,7 @@ interface BookListItemProps {
 export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
   const [title, setTitle] = useState(book.title)
   const [isEditing, setIsEditing] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -31,6 +32,7 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
   }
 
   return (
+    <>
     <Row
       style={{
         width: '100%',
@@ -91,17 +93,26 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
           type="primary"
           danger
           onClick={() =>
-            Modal.confirm({
-              title: 'Delete book?',
-              content: `This will delete "${book.title}".`,
-              okType: 'danger',
-              onOk: () => onDelete(book.id),
-            })
+            setIsDeleteOpen(true)
           }
         >
           <DeleteOutlined />
         </Button>
       </Col>
     </Row>
+    <Modal
+        open={isDeleteOpen}
+        title="Delete book"
+        onCancel={() => setIsDeleteOpen(false)}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+        onOk={() => {
+          onDelete(book.id)
+          setIsDeleteOpen(false)
+        }}
+      >
+        Are you sure you want to delete "{book.title}"?
+      </Modal>  </>
   )
 }

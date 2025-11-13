@@ -24,6 +24,7 @@ export function ClientListItem({
   const [firstName, setFirstName] = useState(client.firstName)
   const [lastName, setLastName] = useState(client.lastName)
   const [email, setEmail] = useState(client.email ?? '')
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -47,6 +48,7 @@ export function ClientListItem({
   }
 
   return (
+    <>
     <Row
       style={{
         width: '100%',
@@ -125,10 +127,25 @@ export function ClientListItem({
             <EditOutlined />
           </Button>
         )}
-        <Button type="primary" danger onClick={onConfirmDelete}>
+        <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>
           <DeleteOutlined />
         </Button>
       </Col>
     </Row>
+
+    <Modal
+        open={isDeleteOpen}
+        title="Delete book"
+        onCancel={() => setIsDeleteOpen(false)}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+        onOk={() => {
+          onDelete(client.id)
+          setIsDeleteOpen(false)
+        }}
+      >
+        Are you sure you want to delete "{client.firstName} {client.lastName}"?
+      </Modal>  </>
   )
 }
