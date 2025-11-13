@@ -7,7 +7,6 @@ import { Skeleton, Space, Typography } from 'antd'
 import { useBookProvider } from '../../providers/useBookProvider'
 import { useSalesProvider } from '../../providers/useSalesProvider'
 import type { BookModel } from '../../BookModel'
-import { useState } from 'react'
 import { Button } from 'antd'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { Input } from 'antd'
@@ -105,7 +104,7 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
   
 
   return (
-    
+    <>
     <Space
       direction="vertical"
       style={{
@@ -153,7 +152,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
           )}
         </div>
 
-      {author.pictureUrl ? (
       {author.pictureUrl && (
         <div
           style={{
@@ -200,9 +198,8 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
             </Button>
           )}
         </div>
-      <Typography.Title level={2} style={{ marginBottom: 0 }}>
-        {author.firstName} {author.lastName}
-      </Typography.Title>
+        
+    
 
       <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
         Total books written: <strong>{authorBooks.length}</strong>
@@ -254,6 +251,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
           This author has no books yet.
         </Typography.Text>
       )}
-    </Space>
+    </Space></>
   )
 }
