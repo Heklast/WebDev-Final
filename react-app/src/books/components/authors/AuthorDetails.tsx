@@ -7,6 +7,11 @@ import { Skeleton, Space, Typography } from 'antd'
 import { useBookProvider } from '../../providers/useBookProvider'
 import { useSalesProvider } from '../../providers/useSalesProvider'
 import type { BookModel } from '../../BookModel'
+import { useState } from 'react'
+import { Button } from 'antd'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { Input } from 'antd'
+
 import type { SaleModel } from '../../SaleModel'
 
 interface AuthorDetailsProp {
@@ -14,8 +19,13 @@ interface AuthorDetailsProp {
 }
 
 export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
-  const { author, loadAuthor, isLoading } = useAuthorDetailsProvider(id)
+  const { author, loadAuthor, isLoading, updateAuthor } = useAuthorDetailsProvider(id)
   const { books, loadBooks } = useBookProvider()
+  const [isEditing, setIsEditing] = useState(false)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [pictureUrl, setPictureUrl] = useState('')
+
   const { loadBookSales } = useSalesProvider()
   const [averageSales, setAverageSales] = useState(0)
 
@@ -23,6 +33,14 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
     loadAuthor()
     loadBooks()
   }, [id])
+  
+  useEffect(() => {
+    if (author) {
+      setFirstName(author.firstName)
+      setLastName(author.lastName)
+      setPictureUrl(author.pictureUrl ?? '')
+    }
+  }, [author])
 
   useEffect(() => {
     const fetchAverageSales = async () => {
@@ -68,7 +86,26 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
     book => book.author.id === author.id
   )
 
+   const onCancelEdit = () => {
+    setIsEditing(false)
+    setFirstName(author.firstName)
+    setLastName(author.lastName)
+    setPictureUrl(author.pictureUrl ?? '')
+  }
+
+  const onValidateEdit = () => {
+    updateAuthor(id, {
+      firstName,
+      lastName,
+      pictureUrl: pictureUrl || undefined,
+    })
+    setIsEditing(false)
+  }
+
+  
+
   return (
+    
     <Space
       direction="vertical"
       style={{
@@ -86,6 +123,37 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
         <ArrowLeftOutlined /> Back to authors
       </Link>
 
+      <div style={{ flex: 1 }}>
+          {isEditing ? (
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <Input
+                placeholder="First name"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+              <Input
+                placeholder="Last name"
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+              />
+              <Input
+                placeholder="pictureURL (optional)"
+                value={pictureUrl}
+                onChange={e => setPictureUrl(e.target.value)}
+              />
+            </Space>
+          ) : (
+            <>
+              <Typography.Title level={2} style={{ marginBottom: 0 }}>
+                {author.firstName} {author.lastName}
+              </Typography.Title>
+                <Typography.Text>{author.pictureUrl}</Typography.Text>
+              
+            </>
+          )}
+        </div>
+
+      {author.pictureUrl ? (
       {author.pictureUrl && (
         <div
           style={{
@@ -109,6 +177,29 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
         </div>
       )}
 
+      <div
+          style={{
+            display: 'flex',
+            gap: '.5rem',
+            alignItems: 'center',
+            marginTop: '.5rem',
+          }}
+        >
+          {isEditing ? (
+            <>
+              <Button type="primary" onClick={onValidateEdit}>
+                <CheckOutlined />
+              </Button>
+              <Button onClick={onCancelEdit}>
+                <CloseOutlined />
+              </Button>
+            </>
+          ) : (
+            <Button type="primary" onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
+          )}
+        </div>
       <Typography.Title level={2} style={{ marginBottom: 0 }}>
         {author.firstName} {author.lastName}
       </Typography.Title>
