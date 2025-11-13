@@ -1,60 +1,134 @@
-import { Button, Input } from 'antd'
 import { useState } from 'react'
-import { Link } from '@tanstack/react-router'
 import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
+import { Button, Col, Row, Modal, Input } from 'antd'
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from '@ant-design/icons'
+import { Link } from '@tanstack/react-router'
 
-interface Props {
+interface ClientListItemProps {
   client: ClientModel
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateClientModel) => void
 }
 
-export function ClientListItem({ client, onDelete, onUpdate }: Props) {
-  const [editing, setEditing] = useState(false)
-  const [form, setForm] = useState({
-    firstName: client.firstName,
-    lastName: client.lastName,
-    email: client.email ?? '',
-  })
+export function ClientListItem({
+  client,
+  onDelete,
+  onUpdate,
+}: ClientListItemProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [firstName, setFirstName] = useState(client.firstName)
+  const [lastName, setLastName] = useState(client.lastName)
+  const [email, setEmail] = useState(client.email ?? '')
 
-  const handleSave = () => {
-    onUpdate(client.id, form)
-    setEditing(false)
+  const onCancelEdit = () => {
+    setIsEditing(false)
+    setFirstName(client.firstName)
+    setLastName(client.lastName)
+    setEmail(client.email ?? '')
   }
 
-  if (editing) {
-    return (
-      <div className="flex gap-2">
-        <Input
-          value={form.firstName}
-          onChange={e => setForm({ ...form, firstName: e.target.value })}
-        />
-        <Input
-          value={form.lastName}
-          onChange={e => setForm({ ...form, lastName: e.target.value })}
-        />
-        <Input
-          value={form.email}
-          onChange={e => setForm({ ...form, email: e.target.value })}
-          placeholder="(optional)"
-        />
-        <Button type="primary" onClick={handleSave}>
-          Save
-        </Button>
-        <Button onClick={() => setEditing(false)}>Cancel</Button>
-      </div>
-    )
+  const onValidateEdit = () => {
+    onUpdate(client.id, { firstName, lastName, email })
+    setIsEditing(false)
+  }
+
+  const onConfirmDelete = () => {
+    Modal.confirm({
+      title: 'Delete client?',
+      content: `This will remove ${client.firstName} ${client.lastName}.`,
+      okType: 'danger',
+      onOk: () => onDelete(client.id),
+    })
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Link to="/clients/$clientId" params={{ clientId: client.id }}>
-        {client.firstName} {client.lastName}
-      </Link>
-      <Button onClick={() => setEditing(true)}>Edit</Button>
-      <Button danger onClick={() => onDelete(client.id)}>
-        Delete
-      </Button>
-    </div>
+    <Row
+      style={{
+        width: '100%',
+        minHeight: '50px',
+        borderRadius: '10px',
+        backgroundColor: '#EEEEEE',
+        margin: '1rem 0',
+        padding: '.25rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Col span={12} style={{ margin: 'auto 0' }}>
+        {isEditing ? (
+          <>
+            <Input
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+              style={{ marginRight: '.25rem' }}
+              placeholder="First name"
+            />
+            <Input
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+              style={{ marginRight: '.25rem' }}
+              placeholder="Last name"
+            />
+            <Input
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Email (optional)"
+            />
+          </>
+        ) : (
+          <Link
+            to="/clients/$clientId"
+            params={{ clientId: client.id }}
+            style={{
+              margin: 'auto 0',
+              textAlign: 'left',
+            }}
+          >
+            <span style={{ fontWeight: 'bold' }}>
+              {client.firstName} {client.lastName}
+            </span>
+            {client.email ? (
+              <span style={{ marginLeft: '.5rem', color: '#555' }}>
+                ({client.email})
+              </span>
+            ) : null}
+          </Link>
+        )}
+      </Col>
+
+      <Col
+        span={4}
+        style={{
+          alignItems: 'right',
+          display: 'flex',
+          gap: '.25rem',
+          margin: 'auto 0',
+          justifyContent: 'flex-end',
+        }}
+      >
+        {isEditing ? (
+          <>
+            <Button type="primary" onClick={onValidateEdit}>
+              <CheckOutlined />
+            </Button>
+            <Button onClick={onCancelEdit}>
+              <CloseOutlined />
+            </Button>
+          </>
+        ) : (
+          <Button type="primary" onClick={() => setIsEditing(true)}>
+            <EditOutlined />
+          </Button>
+        )}
+        <Button type="primary" danger onClick={onConfirmDelete}>
+          <DeleteOutlined />
+        </Button>
+      </Col>
+    </Row>
   )
 }

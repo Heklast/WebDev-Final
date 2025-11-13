@@ -1,54 +1,72 @@
-import { Modal, Input, Form } from 'antd'
 import { useState } from 'react'
+import { Button, Input, Modal, Space } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import type { CreateClientModel } from '@/books/ClientModel'
 
-interface Props {
+interface CreateClientModalProps {
   onCreate: (input: CreateClientModel) => void
 }
 
-export function CreateClientModal({ onCreate }: Props) {
-  const [open, setOpen] = useState(false)
-  const [form] = Form.useForm()
+export function CreateClientModal({ onCreate }: CreateClientModalProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
 
-  const handleOk = async () => {
-    const values = await form.validateFields()
-    onCreate(values)
-    setOpen(false)
-    form.resetFields()
+  const onClose = () => {
+    setFirstName('')
+    setLastName('')
+    setEmail('')
+    setIsOpen(false)
   }
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>Create Client</button>
-      <Modal
-        title="Create Client"
-        open={open}
-        onOk={handleOk}
-        onCancel={() => setOpen(false)}
-        okButtonProps={{
-          disabled:
-            !form.getFieldValue('firstName') || !form.getFieldValue('lastName'),
-        }}
+      <Button
+        icon={<PlusOutlined />}
+        type="primary"
+        onClick={() => setIsOpen(true)}
       >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            name="firstName"
-            label="First Name"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            label="Last Name"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item name="email" label="Email">
-            <Input />
-          </Form.Item>
-        </Form>
+        Create Client
+      </Button>
+      <Modal
+        open={isOpen}
+        onCancel={onClose}
+        onOk={() => {
+          const input: CreateClientModel = {
+            firstName,
+            lastName,
+            // if email is empty, omit it like other optional fields
+            email: email || undefined,
+          }
+          onCreate(input)
+          onClose()
+        }}
+        okButtonProps={{
+          disabled: !firstName?.length || !lastName?.length,
+        }}
+        title="Create Client"
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Input
+            type="text"
+            placeholder="First Name"
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Email (optional)"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </Space>
       </Modal>
     </>
   )

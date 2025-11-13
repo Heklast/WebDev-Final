@@ -1,33 +1,40 @@
-import React from 'react'
-import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
+import {  useEffect } from 'react'
+import { Skeleton } from 'antd'
+import { useClientProvider } from '@/books/providers/useClientProvider'
 import { ClientListItem } from './ClientListItem'
+import { CreateClientModal } from './CreateClientModal'
 
-interface ClientListProps {
-  clients: ClientModel[]
-  onDelete: (id: string) => void
-  onUpdate: (id: string, input: UpdateClientModel) => void
-}
+export function ClientList() {
+  const {
+    clients,
+    loading,
+    loadClients,
+    createClient,
+    updateClient,
+    deleteClient,
+  } = useClientProvider()
 
-export const ClientList: React.FC<ClientListProps> = ({
-  clients,
-  onDelete,
-  onUpdate,
-}) => {
-  if (clients.length === 0) {
-    return <p className="text-gray-500 p-4">No clients found.</p>
-  }
+  useEffect(()=> {
+    loadClients()
+  }, [loadClients])
 
   return (
-    <ul className="space-y-2">
-      {clients.map(client => (
-        <li key={client.id}>
-          <ClientListItem
-            client={client}
-            onDelete={onDelete}
-            onUpdate={onUpdate}
-          />
-        </li>
-      ))}
-    </ul>
+    <>
+      <CreateClientModal onCreate={createClient} />
+      <div style={{ padding: '0 .5rem' }}>
+        {loading ? (
+          <Skeleton active />
+        ) : (
+          clients.map(client => (
+            <ClientListItem
+              key={client.id}
+              client={client}
+              onUpdate={updateClient}
+              onDelete={deleteClient}
+            />
+          ))
+        )}
+      </div>
+    </>
   )
 }

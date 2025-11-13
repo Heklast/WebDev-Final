@@ -1,27 +1,49 @@
-import React from 'react'
-import { useParams, Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { Skeleton, Space, Typography } from 'antd'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { Link } from '@tanstack/react-router'
+import { Route as clientsRoute } from '../../../routes/clients'
 import { useClientProvider } from '@/books/providers/useClientProvider'
 import type { ClientModel } from '@/books/ClientModel'
 
-export const ClientDetails: React.FC = () => {
-  const { clientId } = useParams({ from: '/clients/$clientId' })
-  const { clients } = useClientProvider()
+interface ClientDetailsProps {
+  id: string
+}
 
-  const client = clients.find((c: ClientModel) => c.id === clientId)
+export const ClientDetails = ({ id }: ClientDetailsProps) => {
+  const { clients, loading, loadClients } = useClientProvider()
 
-  if (!client) return <p className="p-4 text-gray-500">Client not found.</p>
+  useEffect(() => {
+    loadClients()
+  }, [loadClients])
+
+  const client = clients.find((c: ClientModel) => c.id === id)
+
+  if (loading) {
+    return <Skeleton active />
+  }
+
+  if (!client) {
+    return <Typography.Text>Client not found.</Typography.Text>
+  }
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-2">
-        {client.firstName} {client.lastName}
-      </h2>
-      {client.email && (
-        <p className="text-gray-600 mb-2">Email: {client.email}</p>
-      )}
-      <Link to="/clients" className="text-blue-600 hover:underline">
-        ← Back to clients
+    <Space direction="vertical" style={{ textAlign: 'left', width: '95%' }}>
+      <Link to={clientsRoute.to}>
+        <ArrowLeftOutlined />
       </Link>
-    </div>
+
+      <Typography.Title level={2}>
+        {client.firstName} {client.lastName}
+      </Typography.Title>
+
+      {client.email ? (
+        <Typography.Text>Email: {client.email}</Typography.Text>
+      ) : (
+        <Typography.Text type="secondary">
+          No email provided.
+        </Typography.Text>
+      )}
+    </Space>
   )
 }
