@@ -1,0 +1,134 @@
+import { useState } from 'react'
+import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
+import { Button, Col, Row, Modal, Input } from 'antd'
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from '@ant-design/icons'
+import { Link } from '@tanstack/react-router'
+
+interface ClientListItemProps {
+  client: ClientModel
+  onDelete: (id: string) => void
+  onUpdate: (id: string, input: UpdateClientModel) => void
+}
+
+export function ClientListItem({
+  client,
+  onDelete,
+  onUpdate,
+}: ClientListItemProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [firstName, setFirstName] = useState(client.firstName)
+  const [lastName, setLastName] = useState(client.lastName)
+  const [email, setEmail] = useState(client.email ?? '')
+
+  const onCancelEdit = () => {
+    setIsEditing(false)
+    setFirstName(client.firstName)
+    setLastName(client.lastName)
+    setEmail(client.email ?? '')
+  }
+
+  const onValidateEdit = () => {
+    onUpdate(client.id, { firstName, lastName, email })
+    setIsEditing(false)
+  }
+
+  const onConfirmDelete = () => {
+    Modal.confirm({
+      title: 'Delete client?',
+      content: `This will remove ${client.firstName} ${client.lastName}.`,
+      okType: 'danger',
+      onOk: () => onDelete(client.id),
+    })
+  }
+
+  return (
+    <Row
+      style={{
+        width: '100%',
+        minHeight: '50px',
+        borderRadius: '10px',
+        backgroundColor: '#EEEEEE',
+        margin: '1rem 0',
+        padding: '.25rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Col span={12} style={{ margin: 'auto 0' }}>
+        {isEditing ? (
+          <>
+            <Input
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+              style={{ marginRight: '.25rem' }}
+              placeholder="First name"
+            />
+            <Input
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+              style={{ marginRight: '.25rem' }}
+              placeholder="Last name"
+            />
+            <Input
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Email (optional)"
+            />
+          </>
+        ) : (
+          <Link
+            to="/clients/$clientId"
+            params={{ clientId: client.id }}
+            style={{
+              margin: 'auto 0',
+              textAlign: 'left',
+            }}
+          >
+            <span style={{ fontWeight: 'bold' }}>
+              {client.firstName} {client.lastName}
+            </span>
+            {client.email ? (
+              <span style={{ marginLeft: '.5rem', color: '#555' }}>
+                ({client.email})
+              </span>
+            ) : null}
+          </Link>
+        )}
+      </Col>
+
+      <Col
+        span={4}
+        style={{
+          alignItems: 'right',
+          display: 'flex',
+          gap: '.25rem',
+          margin: 'auto 0',
+          justifyContent: 'flex-end',
+        }}
+      >
+        {isEditing ? (
+          <>
+            <Button type="primary" onClick={onValidateEdit}>
+              <CheckOutlined />
+            </Button>
+            <Button onClick={onCancelEdit}>
+              <CloseOutlined />
+            </Button>
+          </>
+        ) : (
+          <Button type="primary" onClick={() => setIsEditing(true)}>
+            <EditOutlined />
+          </Button>
+        )}
+        <Button type="primary" danger onClick={onConfirmDelete}>
+          <DeleteOutlined />
+        </Button>
+      </Col>
+    </Row>
+  )
+}

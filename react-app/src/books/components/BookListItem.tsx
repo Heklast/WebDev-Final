@@ -8,6 +8,7 @@ import {
   EditOutlined,
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
+import { Modal } from 'antd'
 
 interface BookListItemProps {
   book: BookModel
@@ -86,7 +87,18 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
             <EditOutlined />
           </Button>
         )}
-        <Button type="primary" danger onClick={() => onDelete(book.id)}>
+        <Button
+          type="primary"
+          danger
+          onClick={() =>
+            Modal.confirm({
+              title: 'Delete book?',
+              content: `This will delete "${book.title}".`,
+              okType: 'danger',
+              onOk: () => onDelete(book.id),
+            })
+          }
+        >
           <DeleteOutlined />
         </Button>
       </Col>

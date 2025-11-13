@@ -4,14 +4,17 @@ import axios from 'axios'
 
 export const useBookProvider = () => {
   const [books, setBooks] = useState<BookModel[]>([])
+  const [loading, setLoading] = useState(false)
 
   const loadBooks = () => {
+    setLoading(true)
     axios
       .get('http://localhost:3000/books')
       .then(data => {
         setBooks(data.data.data)
       })
       .catch(err => console.error(err))
+      .finally(() => setLoading(false))
   }
 
   const createBook = (book: CreateBookModel) => {
@@ -41,5 +44,5 @@ export const useBookProvider = () => {
       .catch(err => console.error(err))
   }
 
-  return { books, loadBooks, createBook, updateBook, deleteBook }
+  return { books, loading, loadBooks, createBook, updateBook, deleteBook }
 }

@@ -1,27 +1,24 @@
-import { useEffect, useState } from 'react'
-import type { CreateAuthorModel } from '../../AuthorModel'
-import { Button, Input, Modal, Select, Space } from 'antd'
+import { useState } from 'react'
+import { Button, Input, Modal, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import type { CreateClientModel } from '@/books/ClientModel'
 
-interface CreateAuthorModalProps {
-  onCreate: (author: CreateAuthorModel) => void
+interface CreateClientModalProps {
+  onCreate: (input: CreateClientModel) => void
 }
 
-export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
+export function CreateClientModal({ onCreate }: CreateClientModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  //const { authors, loadAuthors } = useBookAuthorsProviders()
+  const [email, setEmail] = useState('')
 
   const onClose = () => {
     setFirstName('')
     setLastName('')
+    setEmail('')
     setIsOpen(false)
   }
-
-  useEffect(() => {
-    // const [firstName, setFirstName] = useState('')
-  }, [isOpen])
 
   return (
     <>
@@ -30,21 +27,25 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
         type="primary"
         onClick={() => setIsOpen(true)}
       >
-        Create Author
+        Create Client
       </Button>
       <Modal
         open={isOpen}
         onCancel={onClose}
         onOk={() => {
-          onCreate({
+          const input: CreateClientModel = {
             firstName,
             lastName,
-          })
+            // if email is empty, omit it like other optional fields
+            email: email || undefined,
+          }
+          onCreate(input)
           onClose()
         }}
         okButtonProps={{
-          disabled: !firstName?.length || !lastName.length,
+          disabled: !firstName?.length || !lastName?.length,
         }}
+        title="Create Client"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <Input
@@ -53,12 +54,17 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
           />
-
           <Input
             type="text"
             placeholder="Last Name"
             value={lastName}
             onChange={e => setLastName(e.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Email (optional)"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
           />
         </Space>
       </Modal>
