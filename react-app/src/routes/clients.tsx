@@ -1,5 +1,11 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { Breadcrumb } from '../books/components/Breadcrumb';
 
 export const Route = createFileRoute('/clients')({
-  component: () => <Outlet />,
-})
+  component: () => (
+    <div>
+      <Breadcrumb items={[{ title: 'Clients' }]} />
+      <Outlet />
+    </div>
+  ),
+});
