@@ -1,7 +1,7 @@
 import type { AuthorModel, UpdateAuthorModel } from '../../AuthorModel'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Input} from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -54,24 +54,24 @@ export function AuthorListItem({
     >
       <Col span={16} style={{ margin: 'auto 0' }}>
         {isEditing ? (
-          <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '.25rem' }}>
-            <input
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
-            />
-            <input
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
-            />
-            <input
-              value={pictureUrl}
-              onChange={e => setPictureUrl(e.target.value)}
-              placeholder="Picture URL (optional)"
-            />
-            </div>
-          </>
-        ) : (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', width: '100%', maxWidth: '350px' }}>
+    <Input
+      value={firstName}
+      onChange={e => setFirstName(e.target.value)}
+      placeholder="First Name"
+    />
+    <Input
+      value={lastName}
+      onChange={e => setLastName(e.target.value)}
+      placeholder="Last Name"
+    />
+    <Input
+      value={pictureUrl}
+      onChange={e => setPictureUrl(e.target.value)}
+      placeholder="Picture URL (optional)"
+    />
+  </div>
+) : (
           <Link
             to={`/authors/$authorId`}
             params={{ authorId: author.id }}

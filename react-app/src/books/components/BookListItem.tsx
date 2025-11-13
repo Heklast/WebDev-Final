@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { BookModel, UpdateBookModel } from '../BookModel'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Input } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -49,11 +49,21 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
     >
       <Col span={12} style={{ margin: 'auto 0' }}>
         {isEditing ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '.25rem' }}>
-            <input value={title} onChange={e => setTitle(e.target.value)} />
-            <input value={pictureUrl} onChange={e => setPictureUrl(e.target.value)} placeholder="Picture URL (optional)"/>
-          </div>
-        ) : (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+    <Input
+      value={title}
+      onChange={e => setTitle(e.target.value)}
+      placeholder="Book title"
+      style={{ width: '100%', maxWidth: '250px' }}
+    />
+    <Button type="primary" onClick={onValidateEdit}>
+      <CheckOutlined />
+    </Button>
+    <Button onClick={onCancelEdit}>
+      <CloseOutlined />
+    </Button>
+  </div>
+) : (
           <Link
             to={`/books/$bookId`}
             params={{ bookId: book.id }}

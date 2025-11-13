@@ -53,6 +53,7 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
         okButtonProps={{
           disabled: !authorId || !title?.length || !yearPublished,
         }}
+        title="Create Book"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <Input
