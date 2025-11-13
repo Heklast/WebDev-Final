@@ -174,44 +174,60 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
             Books bought by this client
           </Typography.Title>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales.filter((s:SaleModel) => s.clientId==client.id).map((s: SaleModel) => {
-              const book = resolveBook(s.bookId)
-              const label = book
-                ? `${book.title} by ${book.author.firstName} ${book.author.lastName}`
-                : `Book #${s.bookId}`
+            {sales
+              .filter((s: SaleModel) => s.clientId == client.id)
+              .map((s: SaleModel) => {
+                const book = resolveBook(s.bookId)
 
-              return (
-                <li
-                  key={s.id}
-                  style={{
-                    padding: '.5rem .75rem',
-                    marginBottom: '.5rem',
-                    borderRadius: '8px',
-                    backgroundColor: '#f9fafb',
-                    border: '1px solid #e5e7eb',
-                  }}
-                >
-                  <div>
-                    <Link
-                      to="/books/$bookId"
-                      params={{ bookId: s.bookId }}
-                      style={{ color: '#1d4ed8', fontWeight: 500 }}
-                    >
-                      {label}
-                    </Link>
-                    <div
-                      style={{
-                        fontSize: '.85rem',
-                        color: '#4b5563',
-                        marginTop: '.25rem',
-                      }}
-                    >
-                      {new Date(s.saleDate).toLocaleDateString()}
+                return (
+                  <li
+                    key={s.id}
+                    style={{
+                      padding: '.5rem .75rem',
+                      marginBottom: '.5rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#fff',
+                      border: '1px solid #e5e7eb',
+                      display: 'flex',
+                      gap: '.75rem',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {book?.pictureUrl ? (
+                      <img
+                        src={book.pictureUrl}
+                        alt={book.title}
+                        style={{ width: 64, height: 96, objectFit: 'cover', borderRadius: 6 }}
+                      />
+                    ) : (
+                      <div style={{ width: 64, height: 96, background: '#f3f4f6', borderRadius: 6 }} />
+                    )}
+
+                    <div style={{ flex: 1 }}>
+                      <Link
+                        to="/books/$bookId"
+                        params={{ bookId: s.bookId }}
+                        style={{ color: '#1d4ed8', fontWeight: 600, fontSize: '1rem' }}
+                      >
+                        {book ? book.title : `Book #${s.bookId}`}
+                      </Link>
+                      {book ? (
+                        <div style={{ color: '#374151', fontSize: '.95rem' }}>
+                          {book.author.firstName} {book.author.lastName} · {book.yearPublished}
+                        </div>
+                      ) : null}
+
+                      <div style={{ fontSize: '.85rem', color: '#6b7280', marginTop: '.4rem' }}>
+                        Purchased on {new Date(s.saleDate).toLocaleDateString()}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              )
-            })}
+
+                    <div style={{ textAlign: 'right', minWidth: 100 }}>
+                      {/* future: price, quantity, actions */}
+                    </div>
+                  </li>
+                )
+              })}
           </ul>
         </div>
       ) : null}
