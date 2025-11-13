@@ -25,6 +25,7 @@ export function AuthorListItem({
   const [lastName, setLastName] = useState(author.lastName)
   const [pictureUrl, setPictureUrl] = useState(author.pictureUrl ?? '')
   const [isEditing, setIsEditing] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -38,6 +39,7 @@ export function AuthorListItem({
     setIsEditing(false)
   }
   return (
+    <>
     <Row
       style={{
         width: '100%',
@@ -106,17 +108,26 @@ export function AuthorListItem({
           type="primary"
           danger
           onClick={() =>
-            Modal.confirm({
-              title: 'Delete Author?',
-              content: `This will delete "${author.firstName} ${author.lastName}".`,
-              okType: 'danger',
-              onOk: () => onDelete(author.id),
-            })
+            setIsDeleteOpen(true)
           }
         >
           <DeleteOutlined />
         </Button>
       </Col>
     </Row>
+    <Modal
+        open={isDeleteOpen}
+        title="Delete author"
+        onCancel={() => setIsDeleteOpen(false)}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{ danger: true }}
+        onOk={() => {
+          onDelete(author.id)
+          setIsDeleteOpen(false)
+        }}
+      >
+        Are you sure you want to delete "{author.firstName} {author.lastName}"?
+      </Modal></>
   )
 }
