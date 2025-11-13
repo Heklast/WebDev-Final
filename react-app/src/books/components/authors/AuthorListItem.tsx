@@ -14,12 +14,18 @@ export interface AuthorListItemParams {
   author: AuthorModel
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateAuthorModel) => void
+  salesTotal?: number
+  avgPerBook?: number
+  bookCount?: number
 }
 
 export function AuthorListItem({
   author,
   onDelete,
   onUpdate,
+  salesTotal = 0,
+  avgPerBook = 0,
+  bookCount = 0,
 }: AuthorListItemParams) {
   const [firstName, setFirstName] = useState(author.firstName)
   const [lastName, setLastName] = useState(author.lastName)
@@ -54,7 +60,7 @@ export function AuthorListItem({
         boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
       }}
     >
-      <Col span={16} style={{ margin: 'auto 0' }}>
+      <Col span={12} style={{ margin: 'auto 0' }}>
         {isEditing ? (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', width: '100%', maxWidth: '350px' }}>
     <Input
@@ -86,8 +92,15 @@ export function AuthorListItem({
           </Link>
         )}
       </Col>
+      <Col span={6} style={{ margin: 'auto 0', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <div style={{ textAlign: 'right', color: '#374151' }}>
+          <div style={{ fontWeight: 600 }}>{salesTotal} sold</div>
+          <div style={{ fontSize: '.85rem', color: '#6b7280' }}>{bookCount} books · {avgPerBook} avg/book</div>
+        </div>
+      </Col>
+
       <Col
-        span={4}
+        span={6}
         style={{ alignItems: 'right', display: 'flex', gap: '.25rem', margin: 'auto 0' }}
       >
         {isEditing ? (
