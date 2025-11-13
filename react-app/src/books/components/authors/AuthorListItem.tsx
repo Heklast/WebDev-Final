@@ -9,15 +9,18 @@ import {
   EditOutlined,
 } from '@ant-design/icons'
 import { Modal } from 'antd'
+import type { BookModel } from '../../BookModel'
 
 export interface AuthorListItemParams {
   author: AuthorModel
+  books: BookModel[]
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateAuthorModel) => void
 }
 
 export function AuthorListItem({
   author,
+  books,
   onDelete,
   onUpdate,
 }: AuthorListItemParams) {
@@ -38,6 +41,8 @@ export function AuthorListItem({
     onUpdate(author.id, { firstName, lastName, pictureUrl: pictureUrl || undefined })
     setIsEditing(false)
   }
+
+   const authorBooksCount = books.filter(book => book.author.id === author.id).length
   return (
     <>
     <Row
@@ -84,8 +89,10 @@ export function AuthorListItem({
           >
             <span style={{ fontWeight: 'bold' }}>{author.lastName}</span>
           </Link>
+          
         )}
       </Col>
+      
       <Col
         span={4}
         style={{ alignItems: 'right', display: 'flex', gap: '.25rem', margin: 'auto 0' }}

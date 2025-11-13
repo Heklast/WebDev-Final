@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useBookAuthorsProviders } from '../../providers/useBookAuthorsProviders'
+import { useBookProvider } from '../../providers/useBookProvider'
 import { AuthorListItem } from './AuthorListItem'
 import { CreateAuthorModal } from './CreateAuthorModal'
 import { Skeleton } from 'antd'
@@ -14,8 +15,11 @@ export function AuthorList() {
     updateAuthor,
   } = useBookAuthorsProviders()
 
+  const { books, loadBooks } = useBookProvider()
+
   useEffect(() => {
     loadAuthors()
+    loadBooks()
   }, [])
 
   return (
@@ -29,6 +33,7 @@ export function AuthorList() {
             <AuthorListItem
               key={author.id}
               author={author}
+              books={books}         // <-- pass all books here
               onDelete={deleteAuthor}
               onUpdate={updateAuthor}
             />
