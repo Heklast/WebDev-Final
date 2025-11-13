@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react'
 import axios from 'axios'
 import type { ClientModel, CreateClientModel, UpdateClientModel } from '../ClientModel'
+import type { ApiResponse } from '../types/api'
+import { unwrapApiResponse } from '../types/api'
 
 export const useClientProvider = () => {
   const [clients, setClients] = useState<ClientModel[]>([])
@@ -9,10 +11,10 @@ export const useClientProvider = () => {
   const loadClients = useCallback(() => {
     setLoading(true)
     axios
-      .get('http://localhost:3000/clients')
+      .get<ApiResponse<ClientModel[]>>('http://localhost:3000/clients')
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setClients(body as ClientModel[])
+        const body = unwrapApiResponse(res.data)
+        setClients(body)
       })
       .catch(err => console.error(err))
       .finally(() => setLoading(false))

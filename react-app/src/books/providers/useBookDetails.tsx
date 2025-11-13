@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import type { BookModel } from '../BookModel'
+import type { ApiResponse } from '../types/api'
+import { unwrapApiResponse } from '../types/api'
 
 export const useBookDetails = (bookId: string) => {
   const [book, setBook] = useState<BookModel | null>(null)
@@ -13,10 +15,10 @@ export const useBookDetails = (bookId: string) => {
     setLoading(true)
     setError(null)
     axios
-      .get(`http://localhost:3000/books/${bookId}`)
+      .get<ApiResponse<BookModel>>(`http://localhost:3000/books/${bookId}`)
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setBook(body as BookModel)
+        const body = unwrapApiResponse(res.data)
+        setBook(body)
       })
       .catch(err => {
         console.error(err)

@@ -6,6 +6,7 @@ import { Route as clientsRoute } from '../../../routes/clients'
 import { useClientProvider } from '@/books/providers/useClientProvider'
 import type { ClientModel } from '@/books/ClientModel'
 import { useSalesProvider } from '../../providers/useSalesProvider'
+import { unwrapApiResponse } from '../../types/api'
 import type { SaleModel } from '../../SaleModel'
 import { useBookProvider } from '../../providers/useBookProvider'
 import type { BookModel } from '../../BookModel'
@@ -16,7 +17,7 @@ interface ClientDetailsProps {
 
 export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const { clients, loading, loadClients, updateClient } = useClientProvider()
-  const { loadBookSales } = useSalesProvider()
+  const { loadBookSales, loadClientSales } = useSalesProvider()
   const { books, loadBooks } = useBookProvider()
 
   const [sales, setSales] = useState<SaleModel[]>([])
@@ -32,13 +33,16 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
     loadBooks()
 
     setSalesLoading(true)
-    loadBookSales(id)
+    // prefer client-specific endpoint
+    const loader = loadClientSales ?? loadBookSales
+    loader(id)
       .then(res => {
-        const data = (res.data as any).data ?? res.data
-        setSales(data as SaleModel[])
+        const data = unwrapApiResponse(res.data) as SaleModel[]
+        setSales(data)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
+    
   }, [id])
 
   const client = clients.find((c: ClientModel) => c.id === id)

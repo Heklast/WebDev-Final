@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import type { ClientModel } from '../ClientModel'
+import type { ApiResponse } from '../types/api'
+import { unwrapApiResponse } from '../types/api'
 
 export const useClientDetails = (clientId: string) => {
   const [client, setClient] = useState<ClientModel | null>(null)
@@ -13,10 +15,10 @@ export const useClientDetails = (clientId: string) => {
     setLoading(true)
     setError(null)
     axios
-      .get(`http://localhost:3000/clients/${clientId}`)
+      .get<ApiResponse<ClientModel>>(`http://localhost:3000/clients/${clientId}`)
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setClient(body as ClientModel)
+        const body = unwrapApiResponse(res.data)
+        setClient(body)
       })
       .catch(err => {
         console.error(err)

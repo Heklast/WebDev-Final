@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
-import { Button, Col, Row, Modal, Input } from 'antd'
+import { Button, Col, Row, Modal, Input, Tag } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -13,12 +13,14 @@ interface ClientListItemProps {
   client: ClientModel
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateClientModel) => void
+  salesCount?: number
 }
 
 export function ClientListItem({
   client,
   onDelete,
   onUpdate,
+  salesCount = 0,
 }: ClientListItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [firstName, setFirstName] = useState(client.firstName)
@@ -84,9 +86,12 @@ export function ClientListItem({
               textAlign: 'left',
             }}
           >
-            <span style={{ fontWeight: 'bold' }}>
+              <span style={{ fontWeight: 'bold' }}>
               {client.firstName} {client.lastName}
             </span>
+              <Tag color="blue" style={{ marginLeft: '.5rem', fontSize: '.85rem' }}>
+                {salesCount} books
+              </Tag>
             {client.email ? (
               <span style={{ marginLeft: '.5rem', color: '#555' }}>
                 ({client.email})

@@ -6,6 +6,7 @@ import { Route as booksRoute } from '../../routes/books'
 import { useBookDetailsProvider } from '../providers/useBookDetailsProvider'
 import { BookSalesModal } from './BookSalesModal'
 import { useSalesProvider } from '../providers/useSalesProvider'
+import { unwrapApiResponse } from '../types/api'
 import type { SaleModel } from '../SaleModel'
 import { useClientProvider } from '@/books/providers/useClientProvider'
 import type { ClientModel } from '@/books/ClientModel'
@@ -28,8 +29,8 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
-        const data = (res.data as any).data ?? res.data
-        setSales(data as SaleModel[])
+        const data = unwrapApiResponse(res.data) as SaleModel[]
+        setSales(data)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
@@ -41,8 +42,8 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
-        const data = (res.data as any).data ?? res.data
-        setSales(data as SaleModel[])
+        const data = unwrapApiResponse(res.data) as SaleModel[]
+        setSales(data)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))

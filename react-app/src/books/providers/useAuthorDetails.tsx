@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import type { AuthorModel } from '../AuthorModel'
+import type { ApiResponse } from '../types/api'
+import { unwrapApiResponse } from '../types/api'
 
 export const useAuthorDetails = (authorId: string) => {
   const [author, setAuthor] = useState<AuthorModel | null>(null)
@@ -13,10 +15,10 @@ export const useAuthorDetails = (authorId: string) => {
     setLoading(true)
     setError(null)
     axios
-      .get(`http://localhost:3000/authors/${authorId}`)
+      .get<ApiResponse<AuthorModel>>(`http://localhost:3000/authors/${authorId}`)
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setAuthor(body as AuthorModel)
+        const body = unwrapApiResponse(res.data)
+        setAuthor(body)
       })
       .catch(err => {
         console.error(err)
