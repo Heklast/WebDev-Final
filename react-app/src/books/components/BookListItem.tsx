@@ -14,9 +14,10 @@ interface BookListItemProps {
   book: BookModel
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateBookModel) => void
+  salesCount?: number
 }
 
-export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
+export function BookListItem({ book, onDelete, onUpdate, salesCount = 0 }: BookListItemProps) {
   const [title, setTitle] = useState(book.title)
   const [pictureUrl, setPictureUrl] = useState(book.pictureUrl ?? '')
   const [isEditing, setIsEditing] = useState(false)
@@ -76,9 +77,15 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
           </Link>
         )}
       </Col>
-      <Col span={9} style={{ margin: 'auto 0' }}>
+      <Col span={6} style={{ margin: 'auto 0' }}>
         by <span style={{ fontWeight: 'bold' }}>{book.author.firstName}</span>{' '}
         <span style={{ fontWeight: 'bold' }}>{book.author.lastName}</span>
+      </Col>
+      <Col span={3} style={{ margin: 'auto 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* sales count badge */}
+        <div style={{ background: '#eef2ff', padding: '4px 8px', borderRadius: 8, fontSize: '.85rem', color: '#1d4ed8' }}>
+          {salesCount} sold
+        </div>
       </Col>
       <Col
         span={3}

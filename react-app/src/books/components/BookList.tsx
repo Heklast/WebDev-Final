@@ -3,6 +3,8 @@ import { useBookProvider } from '../providers/useBookProvider'
 import { BookListItem } from './BookListItem'
 import { CreateBookModal } from './CreateBookModal'
 import { Input, Skeleton } from 'antd'
+import { useSalesProvider } from '../providers/useSalesProvider'
+import { unwrapApiResponse } from '../types/api'
 export function BookList() {
   const { books, loading, loadBooks, deleteBook, updateBook, createBook } =
     useBookProvider()
@@ -10,6 +12,23 @@ export function BookList() {
   useEffect(() => {
     loadBooks()
   }, [])
+
+  const { loadAllSales } = useSalesProvider()
+  const [salesCount, setSalesCount] = useState<Record<string, number>>({})
+
+  // load sales once and compute counts per book
+  useEffect(() => {
+    loadAllSales()
+      .then(res => {
+        const sales = unwrapApiResponse(res.data) as any[]
+        const counts: Record<string, number> = {}
+        sales.forEach(s => {
+          counts[s.bookId] = (counts[s.bookId] || 0) + 1
+        })
+        setSalesCount(counts)
+      })
+      .catch(() => setSalesCount({}))
+  }, [loadAllSales])
 
   const [query, setQuery] = useState<string>('')
   const filteredBooks = books.filter(b =>
@@ -49,6 +68,7 @@ export function BookList() {
               book={book}
               onDelete={deleteBook}
               onUpdate={updateBook}
+              salesCount={salesCount[book.id] ?? 0}
             />
           ))
         )}
