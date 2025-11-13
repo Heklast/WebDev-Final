@@ -5,6 +5,8 @@ import { PlusOutlined } from '@ant-design/icons'
 import { useClientProvider } from '../providers/useClientProvider' 
 import { useSalesProvider } from '../providers/useSalesProvider'
 import type { ClientModel } from '../ClientModel'
+import dayjs from 'dayjs'
+
 interface BookSalesModalProps {
   bookId: string
   onCreated?: () => void
@@ -13,14 +15,14 @@ interface BookSalesModalProps {
 export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
   const [open, setOpen] = useState(false)
   const [clientId, setClientId] = useState<string>('')
-  const [date, setDate] = useState<string>('')
+  const [saleDate, setDate] = useState<Date | null>(null)
 
   const { clients, loadClients } = useClientProvider()
   const { createSale } = useSalesProvider()
 
   const onClose = () => {
     setClientId('')
-    setDate('')
+    setDate(new Date())
     setOpen(false)
   }
 
@@ -34,7 +36,7 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
     await createSale({
       bookId,
       clientId,
-      date: new Date(date).toISOString(),
+      saleDate : saleDate!,
     })
     onClose()
     onCreated?.()
@@ -53,7 +55,7 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
         open={open}
         onCancel={onClose}
         onOk={onOk}
-        okButtonProps={{ disabled: !clientId || !date }}
+        okButtonProps={{ disabled: !clientId || !saleDate }}
         title="Create Sale"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
@@ -68,12 +70,11 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
             onChange={(value: string) => setClientId(value)}
           />
           <DatePicker
-            style={{ width: '100%' }}
-            onChange={(_, dateString) =>
-              setDate(
-                Array.isArray(dateString) ? (dateString[0] ?? '') : dateString,
-              )
-            }
+  style={{ width: '100%' }}
+  value={saleDate ? dayjs(saleDate) : null} // optional, if you want it controlled
+  onChange={(date /* Dayjs | null */) => {
+    setDate(date ? date.toDate() : null)
+  }}
           />
         </Space>
       </Modal>

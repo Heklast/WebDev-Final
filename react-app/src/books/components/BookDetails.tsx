@@ -20,32 +20,32 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   const { clients, loadClients } = useClientProvider()
 
   const [sales, setSales] = useState<SaleModel[]>([])
-  const [isSalesLoading, setIsSalesLoading] = useState(false)
+  const [isSalesLoading, setSalesLoading] = useState(false)
 
   useEffect(() => {
     loadBook()
 
-    setIsSalesLoading(true)
+    setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
         const data = (res.data as any).data ?? res.data
         setSales(data as SaleModel[])
       })
       .catch(() => setSales([]))
-      .finally(() => setIsSalesLoading(false))
+      .finally(() => setSalesLoading(false))
 
     loadClients()
   }, [id])
 
   const handleReloadSales = () => {
-    setIsSalesLoading(true)
+    setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
         const data = (res.data as any).data ?? res.data
         setSales(data as SaleModel[])
       })
       .catch(() => setSales([]))
-      .finally(() => setIsSalesLoading(false))
+      .finally(() => setSalesLoading(false))
   }
 
   const resolveClient = (clientId: string): ClientModel | undefined =>
@@ -94,7 +94,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
             Sales
           </Typography.Title>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales.map((s: SaleModel) => {
+            {sales.filter((s: SaleModel) => book !=null ? s.bookId === book.id : "book is null").map((s: SaleModel) => {
               const client = resolveClient(s.clientId)
               const label = client
                 ? `${client.firstName} ${client.lastName}`
@@ -116,7 +116,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
                 >
                   <div>
                     <div style={{ fontSize: '.9rem', color: '#4b5563' }}>
-                      {new Date(s.date).toLocaleString()}
+                      {new Date(s.saleDate).toLocaleDateString()}
                     </div>
                     <div style={{ marginTop: '.25rem' }}>
                       <Link

@@ -16,7 +16,7 @@ interface ClientDetailsProps {
 
 export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const { clients, loading, loadClients, updateClient } = useClientProvider()
-  const { loadClientSales } = useSalesProvider()
+  const { loadBookSales } = useSalesProvider()
   const { books, loadBooks } = useBookProvider()
 
   const [sales, setSales] = useState<SaleModel[]>([])
@@ -32,7 +32,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
     loadBooks()
 
     setSalesLoading(true)
-    loadClientSales(id)
+    loadBookSales(id)
       .then(res => {
         const data = (res.data as any).data ?? res.data
         setSales(data as SaleModel[])
@@ -170,10 +170,10 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
             Books bought by this client
           </Typography.Title>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales.map((s: SaleModel) => {
+            {sales.filter((s:SaleModel) => s.clientId==client.id).map((s: SaleModel) => {
               const book = resolveBook(s.bookId)
               const label = book
-                ? `${book.title} – ${book.author.firstName} ${book.author.lastName}`
+                ? `${book.title} by ${book.author.firstName} ${book.author.lastName}`
                 : `Book #${s.bookId}`
 
               return (
@@ -202,7 +202,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
                         marginTop: '.25rem',
                       }}
                     >
-                      {new Date(s.date).toLocaleString()}
+                      {new Date(s.saleDate).toLocaleDateString()}
                     </div>
                   </div>
                 </li>
