@@ -52,6 +52,23 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   const resolveClient = (clientId: string): ClientModel | undefined =>
     clients.find((c: ClientModel) => c.id === clientId)
 
+  // derive simple monthly summary for charting
+  const salesByMonth = (() => {
+    if (!sales || sales.length === 0) return [] as { key: string; count: number }[]
+    const map: Record<string, number> = {}
+    sales.forEach(s => {
+      const d = new Date(s.saleDate)
+      if (isNaN(d.getTime())) return
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+      map[key] = (map[key] || 0) + 1
+    })
+    // sort keys ascending
+    const keys = Object.keys(map).sort()
+    return keys.map(k => ({ key: k, count: map[k] }))
+  })()
+
+  const maxMonthCount = salesByMonth.reduce((mx, m) => Math.max(mx, m.count), 0)
+
   if (isLoading) {
     return <Skeleton active />
   }
@@ -103,6 +120,36 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
           <Typography.Title level={4} style={{ marginBottom: '0.75rem' }}>
             Sales
           </Typography.Title>
+          {/* summary + sparkline */}
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ fontSize: '1rem', fontWeight: 600 }}>{sales.length} total</div>
+              <div style={{ color: '#6b7280', fontSize: '.9rem' }}>
+                First: {new Date(sales[0].saleDate).toLocaleDateString()}
+              </div>
+              <div style={{ color: '#6b7280', fontSize: '.9rem' }}>
+                Last: {new Date(sales[sales.length - 1].saleDate).toLocaleDateString()}
+              </div>
+            </div>
+            <div style={{ flex: 1 }}>
+              {salesByMonth.length > 0 ? (
+                <svg width="240" height="48" viewBox={`0 0 ${salesByMonth.length * 20} 48`}>
+                  {salesByMonth.map((m, i) => {
+                    const w = 12
+                    const h = maxMonthCount > 0 ? Math.round((m.count / maxMonthCount) * 36) : 0
+                    const x = i * 20 + 4
+                    const y = 44 - h
+                    return (
+                      <g key={m.key}>
+                        <rect x={x} y={y} width={w} height={h} rx={3} fill="#bfdbfe" />
+                      </g>
+                    )
+                  })}
+                </svg>
+              ) : null}
+            </div>
+          </div>
+
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
             {sales.filter((s: SaleModel) => book !=null ? s.bookId === book.id : "book is null").map((s: SaleModel) => {
               const client = resolveClient(s.clientId)
