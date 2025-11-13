@@ -94,11 +94,6 @@ export function ClientListItem({
             <span style={{ fontWeight: 'bold' }}>
               {client.firstName} {client.lastName}
             </span>
-            {client.email ? (
-              <span style={{ marginLeft: '.5rem', color: '#555' }}>
-                ({client.email})
-              </span>
-            ) : null}
           </Link>
         )}
       </Col>
