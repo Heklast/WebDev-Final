@@ -50,13 +50,15 @@ export function ClientListItem({
     <Row
       style={{
         width: '100%',
-        minHeight: '50px',
-        borderRadius: '10px',
-        backgroundColor: '#EEEEEE',
-        margin: '1rem 0',
-        padding: '.25rem',
+        minHeight: '60px',
+        borderRadius: '12px',
+        backgroundColor: '#ffffff',
+        margin: '0.75rem 0',
+        padding: '.5rem .75rem',
         display: 'flex',
         justifyContent: 'space-between',
+        border: '1px solid #e0e7ff',
+        boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
       }}
     >
       <Col span={12} style={{ margin: 'auto 0' }}>

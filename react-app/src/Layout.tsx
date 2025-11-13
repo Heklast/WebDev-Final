@@ -54,14 +54,14 @@ export function Layout({ children }: LayoutProps) {
         style={{
           textAlign: 'left',
           width: '100%',
-          backgroundColor: '#395E66',
+          backgroundColor: '#1d4ed8',
           color: 'white',
         }}
       >
-        <h2 style={{ marginTop: '0' }}>Babel&apos;s Library</h2>
+        <h2 style={{ marginTop: '0', padding: '0.75rem 1rem'  }}>Babel&apos;s Library</h2>
         <Menu mode="horizontal" items={items} />
       </div>
-      <div style={{ width: '100%', overflowY: 'scroll' }}>{children}</div>
+      <div style={{ width: '100%', overflowY: 'scroll', backgroundColor: '#f3f4f6',  padding: '1rem 0', }}>{children}</div>
     </Space>
   )
 }

@@ -11,5 +11,12 @@ export const useSalesProvider = () => {
       `http://localhost:3000/sales?bookId/sales`,
     )
   }
-  return { createSale, loadBookSales }
+
+  const loadClientSales = (clientId: string) => {
+    return axios.get<SaleModel[] | { data: SaleModel[] }>(
+      `http://localhost:3000/clients/${clientId}/sales`,
+    )
+  }
+
+  return { createSale, loadBookSales, loadClientSales }
 }
