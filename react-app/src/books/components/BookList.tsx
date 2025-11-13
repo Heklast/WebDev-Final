@@ -18,12 +18,27 @@ export function BookList() {
 
   return (
     <>
-      <Input.Search
-        placeholder="Search books"
-        onChange={e => setQuery(e.target.value)}
-        style={{ margin: '1rem 0', width: '50%' }}
-      />
-      <CreateBookModal onCreate={createBook} />
+ <div
+  style={{
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    margin: '1rem 0',
+    width: '100%',
+  }}
+>
+  <Input.Search
+    placeholder="Search books"
+    onChange={e => setQuery(e.target.value)}
+    style={{
+      width: '60%',
+      maxWidth: '500px',
+    }}
+  />
+
+  <CreateBookModal onCreate={createBook} />
+</div>
+
       <div style={{ padding: '0 .5rem' }}>
         {loading ? (
           <Skeleton active />

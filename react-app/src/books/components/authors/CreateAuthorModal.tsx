@@ -11,11 +11,12 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  //const { authors, loadAuthors } = useBookAuthorsProviders()
+  const [pictureUrl, setPictureUrl] = useState('')
 
   const onClose = () => {
     setFirstName('')
     setLastName('')
+    setPictureUrl('')
     setIsOpen(false)
   }
 
@@ -39,6 +40,7 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
           onCreate({
             firstName,
             lastName,
+            pictureUrl: pictureUrl || undefined,
           })
           onClose()
         }}
@@ -59,6 +61,12 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
             placeholder="Last Name"
             value={lastName}
             onChange={e => setLastName(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Picture URL (optional)"
+            value={pictureUrl}
+            onChange={e => setPictureUrl(e.target.value)}
           />
         </Space>
       </Modal>

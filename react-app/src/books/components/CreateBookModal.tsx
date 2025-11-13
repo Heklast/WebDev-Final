@@ -14,10 +14,12 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
   const [yearPublished, setYearPublished] = useState(0)
   const [authorId, setAuthorId] = useState('')
   const { authors, loadAuthors } = useBookAuthorsProviders()
+  const [pictureUrl, setPictureUrl] = useState('')
 
   const onClose = () => {
     setTitle('')
     setYearPublished(0)
+    setPictureUrl('')
     setIsOpen(false)
   }
 
@@ -44,6 +46,7 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
             title,
             yearPublished,
             authorId,
+            pictureUrl: pictureUrl || undefined,
           })
           onClose()
         }}
@@ -71,6 +74,12 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
             placeholder="Year Published"
             value={yearPublished}
             onChange={e => setYearPublished(Number(e.target.value))}
+          />
+          <Input
+            type="text"
+            placeholder="Picture URL (optional)"
+            value={pictureUrl}
+            onChange={e => setPictureUrl(e.target.value)}
           />
         </Space>
       </Modal>

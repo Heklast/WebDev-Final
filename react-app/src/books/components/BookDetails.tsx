@@ -73,6 +73,14 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
         <ArrowLeftOutlined /> Back to books
       </Link>
 
+      {book?.pictureUrl ? (
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+         <img src={book.pictureUrl} alt={book.title} 
+            style={{ maxHeight: '220px', borderRadius: '12px', objectFit: 'cover', boxShadow: '0 4px 10px rgba(0,0,0,0.08)' }}
+        />
+        </div>
+      ) : null}
+
       <Typography.Title level={1} style={{ marginBottom: 0 }}>{book?.title}</Typography.Title>
       <Typography.Title level={3} style={{ color: '#1d4ed8' }}>{book?.yearPublished}</Typography.Title>
 

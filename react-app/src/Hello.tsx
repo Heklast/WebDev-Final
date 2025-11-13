@@ -1,3 +1,5 @@
+import { Typography } from 'antd'
+
 interface HelloProps {
   children: React.ReactNode
   name: string
@@ -6,8 +8,8 @@ interface HelloProps {
 export function Hello({ children, name }: HelloProps) {
   return (
     <>
-      <h1>Hello {name}!</h1>
-      <h2>{children}</h2>
+      <Typography.Title level={2}>Hello {name}!</Typography.Title>
+      <Typography.Text>{children}</Typography.Text>
     </>
   )
 }

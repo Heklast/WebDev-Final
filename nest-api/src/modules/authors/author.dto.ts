@@ -9,6 +9,11 @@ export class CreateAuthorDto {
 
   @IsUUID(4)
   authorId:string;
+
+  @IsString()
+  @IsOptional()
+  pictureUrl?: string;
+
 }
 
 export class UpdateAuthorDto{
@@ -19,6 +24,11 @@ export class UpdateAuthorDto{
   @IsString()
   @IsOptional()
   lastName:string;
+
+  @IsString()
+  @IsOptional()
+  pictureUrl?: string;
+
 }
 
 

@@ -2,10 +2,9 @@
 import { useEffect, useState } from 'react'
 import { Button, Modal, Select, DatePicker, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useClientProvider } from '../common/providers/useClientProvider' // Path not confiemed yet awaiting CLient to be done
+import { useClientProvider } from '../providers/useClientProvider' 
 import { useSalesProvider } from '../providers/useSalesProvider'
-import type { ClientModel } from '../ClientModel' // Path not confiemed yet awaiting CLient to be done
-
+import type { ClientModel } from '../ClientModel'
 interface BookSalesModalProps {
   bookId: string
   onCreated?: () => void
