@@ -1,4 +1,4 @@
-import {  useEffect } from 'react'
+import { useEffect } from 'react'
 import { Skeleton } from 'antd'
 import { useClientProvider } from '@/books/providers/useClientProvider'
 import { ClientListItem } from './ClientListItem'
@@ -14,7 +14,7 @@ export function ClientList() {
     deleteClient,
   } = useClientProvider()
 
-  useEffect(()=> {
+  useEffect(() => {
     loadClients()
   }, [loadClients])
 

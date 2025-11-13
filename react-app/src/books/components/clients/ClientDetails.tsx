@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Button, Input, Skeleton, Space, Typography } from 'antd'
-import { ArrowLeftOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import {
+  ArrowLeftOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Route as clientsRoute } from '../../../routes/clients'
 import { useClientProvider } from '@/books/providers/useClientProvider'
@@ -34,8 +38,11 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
     setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
-        const data = (res.data as any).data ?? res.data
-        setSales(data as SaleModel[])
+        const body = res.data
+
+        const sales: SaleModel[] = Array.isArray(body) ? body : body.data
+
+        setSales(sales)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
@@ -170,44 +177,46 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
             Books bought by this client
           </Typography.Title>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales.filter((s:SaleModel) => s.clientId==client.id).map((s: SaleModel) => {
-              const book = resolveBook(s.bookId)
-              const label = book
-                ? `${book.title} by ${book.author.firstName} ${book.author.lastName}`
-                : `Book #${s.bookId}`
+            {sales
+              .filter((s: SaleModel) => s.clientId == client.id)
+              .map((s: SaleModel) => {
+                const book = resolveBook(s.bookId)
+                const label = book
+                  ? `${book.title} by ${book.author.firstName} ${book.author.lastName}`
+                  : `Book #${s.bookId}`
 
-              return (
-                <li
-                  key={s.id}
-                  style={{
-                    padding: '.5rem .75rem',
-                    marginBottom: '.5rem',
-                    borderRadius: '8px',
-                    backgroundColor: '#f9fafb',
-                    border: '1px solid #e5e7eb',
-                  }}
-                >
-                  <div>
-                    <Link
-                      to="/books/$bookId"
-                      params={{ bookId: s.bookId }}
-                      style={{ color: '#1d4ed8', fontWeight: 500 }}
-                    >
-                      {label}
-                    </Link>
-                    <div
-                      style={{
-                        fontSize: '.85rem',
-                        color: '#4b5563',
-                        marginTop: '.25rem',
-                      }}
-                    >
-                      {new Date(s.saleDate).toLocaleDateString()}
+                return (
+                  <li
+                    key={s.id}
+                    style={{
+                      padding: '.5rem .75rem',
+                      marginBottom: '.5rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#f9fafb',
+                      border: '1px solid #e5e7eb',
+                    }}
+                  >
+                    <div>
+                      <Link
+                        to="/books/$bookId"
+                        params={{ bookId: s.bookId }}
+                        style={{ color: '#1d4ed8', fontWeight: 500 }}
+                      >
+                        {label}
+                      </Link>
+                      <div
+                        style={{
+                          fontSize: '.85rem',
+                          color: '#4b5563',
+                          marginTop: '.25rem',
+                        }}
+                      >
+                        {new Date(s.saleDate).toLocaleDateString()}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              )
-            })}
+                  </li>
+                )
+              })}
           </ul>
         </div>
       ) : null}

@@ -14,9 +14,9 @@ export const useAuthorDetailsProvider = (id: string) => {
       .then(data => setAuthor(data))
       .finally(() => setIsLoading(false))
   }
-   const updateAuthor = (id: string, input: UpdateAuthorModel) => {
+  const updateAuthor = (id: string, input: UpdateAuthorModel) => {
     axios
-    .patch(`http://localhost:3000/authors/${id}`, input)
+      .patch(`http://localhost:3000/authors/${id}`, input)
       .then(() => loadAuthor())
       .catch(err => console.error(err))
   }

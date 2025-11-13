@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { CreateAuthorModel } from '../../AuthorModel'
-import { Button, Input, Modal, Select, Space } from 'antd'
+import { Button, Input, Modal, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
 interface CreateAuthorModalProps {
@@ -47,7 +47,6 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
         okButtonProps={{
           disabled: !firstName?.length || !lastName.length,
         }}
-        title="Create Author"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <Input

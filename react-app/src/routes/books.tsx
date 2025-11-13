@@ -1,5 +1,5 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { Breadcrumb } from '../books/components/Breadcrumb';
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Breadcrumb } from '../books/components/Breadcrumb'
 
 export const Route = createFileRoute('/books')({
   component: () => (
@@ -8,4 +8,4 @@ export const Route = createFileRoute('/books')({
       <Outlet />
     </div>
   ),
-});
+})

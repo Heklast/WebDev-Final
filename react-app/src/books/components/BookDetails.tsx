@@ -52,8 +52,11 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
-        const data = (res.data as any).data ?? res.data
-        setSales(data as SaleModel[])
+        const body = res.data
+
+        const sales: SaleModel[] = Array.isArray(body) ? body : body.data
+
+        setSales(sales)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
@@ -97,8 +100,11 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     setSalesLoading(true)
     loadBookSales(id)
       .then(res => {
-        const data = (res.data as any).data ?? res.data
-        setSales(data as SaleModel[])
+        const body = res.data
+
+        const sales: SaleModel[] = Array.isArray(body) ? body : body.data
+
+        setSales(sales)
       })
       .catch(() => setSales([]))
       .finally(() => setSalesLoading(false))
@@ -178,9 +184,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
               style={{ width: '100%' }}
               value={yearPublished}
               onChange={value =>
-                setYearPublished(
-                  typeof value === 'number' ? value : undefined,
-                )
+                setYearPublished(typeof value === 'number' ? value : undefined)
               }
             />
 
@@ -267,9 +271,7 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
                     }}
                   >
                     <div>
-                      <div
-                        style={{ fontSize: '.9rem', color: '#4b5563' }}
-                      >
+                      <div style={{ fontSize: '.9rem', color: '#4b5563' }}>
                         {new Date(s.saleDate).toLocaleDateString()}
                       </div>
                       <div style={{ marginTop: '.25rem' }}>

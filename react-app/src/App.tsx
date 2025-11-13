@@ -40,7 +40,10 @@ function App() {
           Discover books, authors, clients and more.
         </Typography.Text>
 
-        <Space direction="vertical" style={{ width: '100%', marginTop: '2rem' }}>
+        <Space
+          direction="vertical"
+          style={{ width: '100%', marginTop: '2rem' }}
+        >
           <Input
             placeholder="Enter your name"
             value={newName}
