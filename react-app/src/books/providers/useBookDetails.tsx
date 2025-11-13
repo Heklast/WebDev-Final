@@ -15,8 +15,10 @@ export const useBookDetails = (bookId: string) => {
     axios
       .get(`http://localhost:3000/books/${bookId}`)
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setBook(body as BookModel)
+        const body = res.data
+        const parsed: BookModel = 'data' in body ? body.data : body
+
+        setBook(parsed)
       })
       .catch(err => {
         console.error(err)

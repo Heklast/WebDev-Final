@@ -15,8 +15,9 @@ export const useClientDetails = (clientId: string) => {
     axios
       .get(`http://localhost:3000/clients/${clientId}`)
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setClient(body as ClientModel)
+        const body = res.data
+        const parsed: ClientModel = 'data' in body ? body.data : body
+        setClient(parsed)
       })
       .catch(err => {
         console.error(err)

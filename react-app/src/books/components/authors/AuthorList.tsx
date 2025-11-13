@@ -33,7 +33,7 @@ export function AuthorList() {
             <AuthorListItem
               key={author.id}
               author={author}
-              books={books}         // <-- pass all books here
+              books={books} // <-- pass all books here
               onDelete={deleteAuthor}
               onUpdate={updateAuthor}
             />

@@ -15,12 +15,10 @@ export const useBookDetailsProvider = (id: string) => {
   }
   const updateBook = (id: string, input: UpdateBookModel) => {
     axios
-    .patch(`http://localhost:3000/books/${id}`, input)
+      .patch(`http://localhost:3000/books/${id}`, input)
       .then(() => loadBook())
       .catch(err => console.error(err))
-  } 
+  }
 
   return { isLoading, book, loadBook, updateBook }
-
-  
 }

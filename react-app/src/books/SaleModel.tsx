@@ -10,5 +10,3 @@ export type CreateSaleModel = {
   clientId: string
   saleDate: Date
 }
-
-

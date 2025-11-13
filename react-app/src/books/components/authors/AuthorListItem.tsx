@@ -1,7 +1,7 @@
 import type { AuthorModel, UpdateAuthorModel } from '../../AuthorModel'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Button, Col, Row, Input} from 'antd'
+import { Button, Col, Row, Input } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -38,91 +38,103 @@ export function AuthorListItem({
   }
 
   const onValidateEdit = () => {
-    onUpdate(author.id, { firstName, lastName, pictureUrl: pictureUrl || undefined })
+    onUpdate(author.id, {
+      firstName,
+      lastName,
+      pictureUrl: pictureUrl || undefined,
+    })
     setIsEditing(false)
   }
 
-   const authorBooksCount = books.filter(book => book.author.id === author.id).length
+  const authorBooksCount = books.filter(
+    book => book.author.id === author.id,
+  ).length
   return (
     <>
-    <Row
-      style={{
-        width: '100%',
-        minHeight: '60px',
-        borderRadius: '12px',
-        backgroundColor: '#ffffff',
-        margin: '0.75rem 0',
-        padding: '.5rem .75rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        border: '1px solid #e0e7ff',
-        boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
-      }}
-    >
-      <Col span={16} style={{ margin: 'auto 0' }}>
-        {isEditing ? (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', width: '100%', maxWidth: '350px' }}>
-    <Input
-      value={firstName}
-      onChange={e => setFirstName(e.target.value)}
-      placeholder="First Name"
-    />
-    <Input
-      value={lastName}
-      onChange={e => setLastName(e.target.value)}
-      placeholder="Last Name"
-    />
-    <Input
-      value={pictureUrl}
-      onChange={e => setPictureUrl(e.target.value)}
-      placeholder="Picture URL (optional)"
-    />
-  </div>
-) : (
-          <Link
-            to={`/authors/$authorId`}
-            params={{ authorId: author.id }}
-            style={{
-              margin: 'auto 0',
-              textAlign: 'left',
-            }}
-          >
-            <span style={{ fontWeight: 'bold' }}>{author.lastName}</span>
-          </Link>
-          
-        )}
-      </Col>
-      
-      <Col
-        span={4}
-        style={{ alignItems: 'right', display: 'flex', gap: '.25rem', margin: 'auto 0' }}
+      <Row
+        style={{
+          width: '100%',
+          minHeight: '60px',
+          borderRadius: '12px',
+          backgroundColor: '#ffffff',
+          margin: '0.75rem 0',
+          padding: '.5rem .75rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          border: '1px solid #e0e7ff',
+          boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
+        }}
       >
-        {isEditing ? (
-          <>
-            <Button type="primary" onClick={onValidateEdit}>
-              <CheckOutlined />
-            </Button>
-            <Button onClick={onCancelEdit}>
-              <CloseOutlined />
-            </Button>
-          </>
-        ) : (
-          <Button type="primary" onClick={() => setIsEditing(true)}>
-            <EditOutlined />
-          </Button>
-        )}
-        <Button
-          type="primary"
-          danger
-          onClick={() =>
-            setIsDeleteOpen(true)
-          }
+        <Col span={16} style={{ margin: 'auto 0' }}>
+          {isEditing ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '.5rem',
+                width: '100%',
+                maxWidth: '350px',
+              }}
+            >
+              <Input
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                placeholder="First Name"
+              />
+              <Input
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                placeholder="Last Name"
+              />
+              <Input
+                value={pictureUrl}
+                onChange={e => setPictureUrl(e.target.value)}
+                placeholder="Picture URL (optional)"
+              />
+            </div>
+          ) : (
+            <Link
+              to={`/authors/$authorId`}
+              params={{ authorId: author.id }}
+              style={{
+                margin: 'auto 0',
+                textAlign: 'left',
+              }}
+            >
+              <span style={{ fontWeight: 'bold' }}>{author.lastName}</span>
+            </Link>
+          )}
+        </Col>
+
+        <Col
+          span={4}
+          style={{
+            alignItems: 'right',
+            display: 'flex',
+            gap: '.25rem',
+            margin: 'auto 0',
+          }}
         >
-          <DeleteOutlined />
-        </Button>
-      </Col>
-    </Row>
-    <Modal
+          {isEditing ? (
+            <>
+              <Button type="primary" onClick={onValidateEdit}>
+                <CheckOutlined />
+              </Button>
+              <Button onClick={onCancelEdit}>
+                <CloseOutlined />
+              </Button>
+            </>
+          ) : (
+            <Button type="primary" onClick={() => setIsEditing(true)}>
+              <EditOutlined />
+            </Button>
+          )}
+          <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>
+            <DeleteOutlined />
+          </Button>
+        </Col>
+      </Row>
+      <Modal
         open={isDeleteOpen}
         title="Delete author"
         onCancel={() => setIsDeleteOpen(false)}
@@ -134,7 +146,9 @@ export function AuthorListItem({
           setIsDeleteOpen(false)
         }}
       >
-        Are you sure you want to delete "{author.firstName} {author.lastName}"?
-      </Modal></>
+        Are you sure you want to delete the author: {author.firstName}{' '}
+        {author.lastName}?
+      </Modal>
+    </>
   )
 }

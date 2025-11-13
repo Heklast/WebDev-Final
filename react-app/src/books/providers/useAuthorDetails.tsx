@@ -12,11 +12,18 @@ export const useAuthorDetails = (authorId: string) => {
 
     setLoading(true)
     setError(null)
+
     axios
-      .get(`http://localhost:3000/authors/${authorId}`)
+      .get<AuthorModel | { data: AuthorModel }>(
+        `http://localhost:3000/authors/${authorId}`,
+      )
       .then(res => {
-        const body = (res.data as any)?.data ?? res.data
-        setAuthor(body as AuthorModel)
+        const body = res.data
+
+        // Body can be AuthorModel OR { data: AuthorModel }
+        const parsed: AuthorModel = 'data' in body ? body.data : body
+
+        setAuthor(parsed)
       })
       .catch(err => {
         console.error(err)

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Modal, Select, DatePicker, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useClientProvider } from '../providers/useClientProvider' 
+import { useClientProvider } from '../providers/useClientProvider'
 import { useSalesProvider } from '../providers/useSalesProvider'
 import type { ClientModel } from '../ClientModel'
 import dayjs from 'dayjs'
@@ -36,7 +36,7 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
     await createSale({
       bookId,
       clientId,
-      saleDate : saleDate!,
+      saleDate: saleDate!,
     })
     onClose()
     onCreated?.()
@@ -70,11 +70,11 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
             onChange={(value: string) => setClientId(value)}
           />
           <DatePicker
-  style={{ width: '100%' }}
-  value={saleDate ? dayjs(saleDate) : null} // optional, if you want it controlled
-  onChange={(date /* Dayjs | null */) => {
-    setDate(date ? date.toDate() : null)
-  }}
+            style={{ width: '100%' }}
+            value={saleDate ? dayjs(saleDate) : null} // optional, if you want it controlled
+            onChange={(date /* Dayjs | null */) => {
+              setDate(date ? date.toDate() : null)
+            }}
           />
         </Space>
       </Modal>
