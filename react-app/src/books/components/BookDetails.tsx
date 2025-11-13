@@ -1,6 +1,19 @@
 import { useEffect, useState } from 'react'
-import { Skeleton, Space, Typography } from 'antd'
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import {
+  Skeleton,
+  Space,
+  Typography,
+  Input,
+  Button,
+  Select,
+  InputNumber,
+} from 'antd'
+import {
+  ArrowLeftOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  EditOutlined,
+} from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Route as booksRoute } from '../../routes/books'
 import { useBookDetailsProvider } from '../providers/useBookDetailsProvider'
@@ -9,19 +22,30 @@ import { useSalesProvider } from '../providers/useSalesProvider'
 import type { SaleModel } from '../SaleModel'
 import { useClientProvider } from '@/books/providers/useClientProvider'
 import type { ClientModel } from '@/books/ClientModel'
+import { useBookAuthorsProviders } from '@/books/providers/useBookAuthorsProviders'
 
 interface BookDetailsProps {
   id: string
 }
 
 export const BookDetails = ({ id }: BookDetailsProps) => {
-  const { isLoading, book, loadBook } = useBookDetailsProvider(id)
+  const { isLoading, book, loadBook, updateBook } = useBookDetailsProvider(id)
   const { loadBookSales } = useSalesProvider()
   const { clients, loadClients } = useClientProvider()
+  const { authors, loadAuthors } = useBookAuthorsProviders()
 
   const [sales, setSales] = useState<SaleModel[]>([])
   const [isSalesLoading, setSalesLoading] = useState(false)
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [title, setTitle] = useState('')
+  const [pictureUrl, setPictureUrl] = useState('')
+  const [authorId, setAuthorId] = useState('')
+  const [yearPublished, setYearPublished] = useState<number | undefined>(
+    undefined,
+  )
+
+  // Load book, sales, clients
   useEffect(() => {
     loadBook()
 
@@ -37,6 +61,38 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
     loadClients()
   }, [id])
 
+  useEffect(() => {
+    loadAuthors()
+  }, [])
+
+  useEffect(() => {
+    if (book) {
+      setTitle(book.title)
+      setPictureUrl(book.pictureUrl ?? '')
+      setAuthorId(book.author.id)
+      setYearPublished(book.yearPublished)
+    }
+  }, [book])
+
+  const onCancelEdit = () => {
+    if (!book) return
+    setIsEditing(false)
+    setTitle(book.title)
+    setPictureUrl(book.pictureUrl ?? '')
+    setAuthorId(book.author.id)
+    setYearPublished(book.yearPublished)
+  }
+
+  const onValidateEdit = () => {
+    updateBook(id, {
+      title,
+      pictureUrl: pictureUrl || undefined,
+      authorId,
+      yearPublished: yearPublished ?? new Date().getFullYear(),
+    })
+    setIsEditing(false)
+  }
+
   const handleReloadSales = () => {
     setSalesLoading(true)
     loadBookSales(id)
@@ -51,9 +107,11 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   const resolveClient = (clientId: string): ClientModel | undefined =>
     clients.find((c: ClientModel) => c.id === clientId)
 
-  if (isLoading) {
+  if (isLoading || !book) {
     return <Skeleton active />
   }
+
+  const authorLabel = `${book.author.firstName} ${book.author.lastName}`
 
   return (
     <Space
@@ -73,18 +131,110 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
         <ArrowLeftOutlined /> Back to books
       </Link>
 
-      {book?.pictureUrl ? (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-         <img src={book.pictureUrl} alt={book.title} 
-            style={{ maxHeight: '220px', borderRadius: '12px', objectFit: 'cover', boxShadow: '0 4px 10px rgba(0,0,0,0.08)' }}
-        />
+      {book.pictureUrl ? (
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '1rem',
+          }}
+        >
+          <img
+            src={book.pictureUrl}
+            alt={book.title}
+            style={{
+              maxHeight: '220px',
+              borderRadius: '12px',
+              objectFit: 'cover',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.08)',
+            }}
+          />
         </div>
       ) : null}
 
-      <Typography.Title level={1} style={{ marginBottom: 0 }}>{book?.title}</Typography.Title>
-      <Typography.Title level={3} style={{ color: '#1d4ed8' }}>{book?.yearPublished}</Typography.Title>
+      <div style={{ flex: 1 }}>
+        {isEditing ? (
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Input
+              placeholder="Title"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
 
-      <BookSalesModal bookId={id} onCreated={handleReloadSales}/>
+            <Select
+              placeholder="Select author"
+              value={authorId}
+              onChange={value => setAuthorId(value)}
+              style={{ width: '100%' }}
+              options={authors.map(a => ({
+                value: a.id,
+                label: `${a.firstName} ${a.lastName}`,
+              }))}
+            />
+
+            <InputNumber
+              placeholder="Year published"
+              style={{ width: '100%' }}
+              value={yearPublished}
+              onChange={value =>
+                setYearPublished(
+                  typeof value === 'number' ? value : undefined,
+                )
+              }
+            />
+
+            <Input
+              placeholder="pictureURL (optional)"
+              value={pictureUrl}
+              onChange={e => setPictureUrl(e.target.value)}
+            />
+
+            <Space>
+              <Button
+                type="primary"
+                icon={<CheckOutlined />}
+                onClick={onValidateEdit}
+                disabled={!title.trim() || !authorId || !yearPublished}
+              >
+                Save
+              </Button>
+              <Button icon={<CloseOutlined />} onClick={onCancelEdit}>
+                Cancel
+              </Button>
+            </Space>
+          </Space>
+        ) : (
+          <>
+            <Typography.Title level={2} style={{ marginBottom: 0 }}>
+              {book.title}
+            </Typography.Title>
+            <Typography.Text
+              style={{
+                display: 'block',
+                color: '#475569',
+                marginBottom: '.25rem',
+              }}
+            >
+              by {authorLabel}
+            </Typography.Text>
+            <Typography.Text style={{ color: '#64748b' }}>
+              Published in {book.yearPublished}
+            </Typography.Text>
+            <div style={{ marginTop: '.75rem' }}>
+              <Button
+                type="primary"
+                icon={<EditOutlined />}
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+
+      <BookSalesModal bookId={id} onCreated={handleReloadSales} />
 
       {isSalesLoading && sales.length === 0 ? (
         <Skeleton active />
@@ -94,43 +244,47 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
             Sales
           </Typography.Title>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales.filter((s: SaleModel) => book !=null ? s.bookId === book.id : "book is null").map((s: SaleModel) => {
-              const client = resolveClient(s.clientId)
-              const label = client
-                ? `${client.firstName} ${client.lastName}`
-                : `Client #${s.clientId}`
+            {sales
+              .filter((s: SaleModel) => s.bookId === book.id)
+              .map((s: SaleModel) => {
+                const client = resolveClient(s.clientId)
+                const label = client
+                  ? `${client.firstName} ${client.lastName}`
+                  : `Client #${s.clientId}`
 
-              return (
-                <li
-                  key={s.id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '.5rem .75rem',
-                    marginBottom: '.5rem',
-                    borderRadius: '8px',
-                    backgroundColor: '#f9fafb',
-                    border: '1px solid #e5e7eb',
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '.9rem', color: '#4b5563' }}>
-                      {new Date(s.saleDate).toLocaleDateString()}
-                    </div>
-                    <div style={{ marginTop: '.25rem' }}>
-                      <Link
-                        to="/clients/$clientId"
-                        params={{ clientId: s.clientId }}
-                        style={{ color: '#1d4ed8' }}
+                return (
+                  <li
+                    key={s.id}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '.5rem .75rem',
+                      marginBottom: '.5rem',
+                      borderRadius: '8px',
+                      backgroundColor: '#f9fafb',
+                      border: '1px solid #e5e7eb',
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{ fontSize: '.9rem', color: '#4b5563' }}
                       >
-                        {label}
-                      </Link>
+                        {new Date(s.saleDate).toLocaleDateString()}
+                      </div>
+                      <div style={{ marginTop: '.25rem' }}>
+                        <Link
+                          to="/clients/$clientId"
+                          params={{ clientId: s.clientId }}
+                          style={{ color: '#1d4ed8' }}
+                        >
+                          {label}
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              )
-            })}
+                  </li>
+                )
+              })}
           </ul>
         </div>
       ) : null}
