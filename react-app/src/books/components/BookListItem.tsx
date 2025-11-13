@@ -18,15 +18,17 @@ interface BookListItemProps {
 
 export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
   const [title, setTitle] = useState(book.title)
+  const [pictureUrl, setPictureUrl] = useState(book.pictureUrl ?? '')
   const [isEditing, setIsEditing] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
     setTitle(book.title)
+    setPictureUrl(book.pictureUrl ?? '')
   }
 
   const onValidateEdit = () => {
-    onUpdate(book.id, { title })
+    onUpdate(book.id, { title, pictureUrl: pictureUrl || undefined })
     setIsEditing(false)
   }
 
@@ -47,15 +49,15 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
     >
       <Col span={12} style={{ margin: 'auto 0' }}>
         {isEditing ? (
-          <input value={title} onChange={e => setTitle(e.target.value)} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '.25rem' }}>
+            <input value={title} onChange={e => setTitle(e.target.value)} />
+            <input value={pictureUrl} onChange={e => setPictureUrl(e.target.value)} placeholder="Picture URL (optional)"/>
+          </div>
         ) : (
           <Link
             to={`/books/$bookId`}
             params={{ bookId: book.id }}
-            style={{
-              margin: 'auto 0',
-              textAlign: 'left',
-            }}
+            style={{ margin: 'auto 0', textAlign: 'left' }}
           >
             <span style={{ fontWeight: 'bold' }}>{book.title}</span> -{' '}
             {book.yearPublished}
@@ -68,12 +70,7 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
       </Col>
       <Col
         span={3}
-        style={{
-          alignItems: 'right',
-          display: 'flex',
-          gap: '.25rem',
-          margin: 'auto 0',
-        }}
+        style={{ alignItems: 'right', display: 'flex', gap: '.25rem', margin: 'auto 0' }}
       >
         {isEditing ? (
           <>

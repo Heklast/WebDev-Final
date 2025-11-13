@@ -23,16 +23,18 @@ export function AuthorListItem({
 }: AuthorListItemParams) {
   const [firstName, setFirstName] = useState(author.firstName)
   const [lastName, setLastName] = useState(author.lastName)
+  const [pictureUrl, setPictureUrl] = useState(author.pictureUrl ?? '')
   const [isEditing, setIsEditing] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
     setFirstName(author.firstName)
     setLastName(author.lastName)
+    setPictureUrl(author.pictureUrl ?? '')
   }
 
   const onValidateEdit = () => {
-    onUpdate(author.id, { firstName, lastName })
+    onUpdate(author.id, { firstName, lastName, pictureUrl: pictureUrl || undefined })
     setIsEditing(false)
   }
   return (
@@ -50,9 +52,10 @@ export function AuthorListItem({
         boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
       }}
     >
-      <Col span={12} style={{ margin: 'auto 0' }}>
+      <Col span={16} style={{ margin: 'auto 0' }}>
         {isEditing ? (
           <>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '.25rem' }}>
             <input
               value={firstName}
               onChange={e => setFirstName(e.target.value)}
@@ -61,6 +64,12 @@ export function AuthorListItem({
               value={lastName}
               onChange={e => setLastName(e.target.value)}
             />
+            <input
+              value={pictureUrl}
+              onChange={e => setPictureUrl(e.target.value)}
+              placeholder="Picture URL (optional)"
+            />
+            </div>
           </>
         ) : (
           <Link
@@ -76,13 +85,8 @@ export function AuthorListItem({
         )}
       </Col>
       <Col
-        span={3}
-        style={{
-          alignItems: 'right',
-          display: 'flex',
-          gap: '.25rem',
-          margin: 'auto 0',
-        }}
+        span={4}
+        style={{ alignItems: 'right', display: 'flex', gap: '.25rem', margin: 'auto 0' }}
       >
         {isEditing ? (
           <>
