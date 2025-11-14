@@ -47,6 +47,7 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
         okButtonProps={{
           disabled: !firstName?.length || !lastName.length,
         }}
+        title="Create New Author"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <Input

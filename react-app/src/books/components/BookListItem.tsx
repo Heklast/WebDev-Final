@@ -72,11 +72,10 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
         <Col
           span={4}
           style={{
-            alignItems: 'right',
             display: 'flex',
-            gap: '.25rem',
-            margin: 'auto 0',
-            justifyContent: 'flex-end',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  paddingRight: '1.25rem',
           }}
         >
           <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>

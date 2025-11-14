@@ -3,6 +3,7 @@ import { useBookProvider } from '../providers/useBookProvider'
 import { BookListItem } from './BookListItem'
 import { CreateBookModal } from './CreateBookModal'
 import { Input, Skeleton } from 'antd'
+
 export function BookList() {
   const { books, loading, loadBooks, deleteBook, createBook } =
     useBookProvider()
@@ -18,12 +19,26 @@ export function BookList() {
 
   return (
     <>
-      <Input.Search
-        placeholder="Search books"
-        onChange={e => setQuery(e.target.value)}
-        style={{ margin: '1rem 0', width: '50%' }}
-      />
-      <CreateBookModal onCreate={createBook} />
+      {/* Top bar: search on the left, create button on the right */}
+     <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '1.5rem',
+    margin: '1rem 0',
+  }}
+>
+  <Input.Search
+    placeholder="Search books"
+    onChange={e => setQuery(e.target.value)}
+    style={{ width: '300px' }}
+  />
+
+  <CreateBookModal onCreate={createBook} />
+</div>
+
+
       <div style={{ padding: '0 .5rem' }}>
         {loading ? (
           <Skeleton active />
