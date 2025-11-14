@@ -10,7 +10,6 @@ export function ClientList() {
     loading,
     loadClients,
     createClient,
-    updateClient,
     deleteClient,
   } = useClientProvider()
 
@@ -29,7 +28,6 @@ export function ClientList() {
             <ClientListItem
               key={client.id}
               client={client}
-              onUpdate={updateClient}
               onDelete={deleteClient}
             />
           ))
