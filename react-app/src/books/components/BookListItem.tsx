@@ -1,22 +1,28 @@
 import { useState } from 'react'
 import type { BookModel, UpdateBookModel } from '../BookModel'
-import { Button, Col, Row, Input } from 'antd'
+import { Button, Col, Row, Input,  Modal } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  UserOutlined, //  Add icon for clients
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
-import { Modal } from 'antd'
 
 interface BookListItemProps {
   book: BookModel
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateBookModel) => void
+  salesCount: number 
 }
 
-export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
+export function BookListItem({ 
+  book, 
+  onDelete, 
+  onUpdate,
+  salesCount, // 
+}: BookListItemProps) {
   const [title, setTitle] = useState(book.title)
   const [pictureUrl, setPictureUrl] = useState(book.pictureUrl ?? '')
   const [isEditing, setIsEditing] = useState(false)
@@ -68,14 +74,20 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
               </Button>
             </div>
           ) : (
-            <Link
-              to={`/books/$bookId`}
-              params={{ bookId: book.id }}
-              style={{ margin: 'auto 0', textAlign: 'left' }}
-            >
-              <span style={{ fontWeight: 'bold' }}>{book.title}</span> -{' '}
-              {book.yearPublished}
-            </Link>
+            <div>
+              <Link
+                to={`/books/$bookId`}
+                params={{ bookId: book.id }}
+                style={{ margin: 'auto 0', textAlign: 'left' }}
+              >
+                <span style={{ fontWeight: 'bold' }}>{book.title}</span> -{' '}
+                {book.yearPublished}
+              </Link>
+              
+              <div style={{ marginTop: '.25rem', fontSize: '0.9em', color: '#888' }}>
+                <UserOutlined /> {salesCount} {salesCount === 1 ? 'client' : 'clients'} purchased
+              </div>
+            </div>
           )}
         </Col>
         <Col span={9} style={{ margin: 'auto 0' }}>
@@ -112,7 +124,7 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
       </Row>
       <Modal
         open={isDeleteOpen}
-        title="Delete author"
+        title="Delete book"
         onCancel={() => setIsDeleteOpen(false)}
         okText="Delete"
         cancelText="Cancel"
