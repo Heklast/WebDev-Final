@@ -2,21 +2,11 @@ export type BookModel = {
   id: string
   title: string
   yearPublished: number
-  author: {
-    id: string
-    firstName: string
-    lastName: string
-  }
   pictureUrl?: string
 }
 
 export type CreateBookModel = {
   authorId: string
-  author: {
-    id: string
-    firstName: string
-    lastName: string
-  }
   title: string
   yearPublished: number
   pictureUrl?: string
