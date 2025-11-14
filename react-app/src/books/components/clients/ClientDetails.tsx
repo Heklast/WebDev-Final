@@ -30,6 +30,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [pictureUrl, setPictureUrl] = useState('')
 
   useEffect(() => {
     loadClients()
@@ -55,6 +56,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
       setFirstName(client.firstName)
       setLastName(client.lastName)
       setEmail(client.email ?? '')
+      setPictureUrl(client.pictureUrl ?? '')
     }
   }, [client])
 
@@ -89,14 +91,14 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
     <Space
       direction="vertical"
       style={{
-        textAlign: 'left',
-        width: '95%',
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: '1.5rem',
-        backgroundColor: '#ffffff',
-        borderRadius: '12px',
-        boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)',
+          textAlign: 'left',
+          width: '95%',
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '1.5rem',
+          backgroundColor: '#ffffff',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)',
       }}
     >
       <Link to={clientsRoute.to}>
@@ -128,6 +130,11 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
+              <Input
+                placeholder="pictureURL (optional)"
+                value={pictureUrl}
+                onChange={e => setPictureUrl(e.target.value)}
+              />
             </Space>
           ) : (
             <>
@@ -144,6 +151,29 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
             </>
           )}
         </div>
+
+        {client.pictureUrl && (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: '1rem',
+            }}
+          >
+            <img
+              src={client.pictureUrl}
+              alt={`${client.firstName} ${client.lastName}`}
+              style={{
+                width: '180px',
+                height: '180px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.08)',
+              }}
+            />
+          </div>
+        )}
 
         <div
           style={{
