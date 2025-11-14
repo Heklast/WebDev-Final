@@ -20,11 +20,8 @@ interface ClientDetailsProps {
 
 export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const { clients, loading, loadClients, updateClient } = useClientProvider()
-  const { loadBookSales } = useSalesProvider()
+  const { sales, loadSales, loading: salesLoading } = useSalesProvider()
   const { books, loadBooks } = useBookProvider()
-
-  const [sales, setSales] = useState<SaleModel[]>([])
-  const [salesLoading, setSalesLoading] = useState(false)
 
   const [isEditing, setIsEditing] = useState(false)
   const [firstName, setFirstName] = useState('')
@@ -35,19 +32,8 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
   useEffect(() => {
     loadClients()
     loadBooks()
-
-    setSalesLoading(true)
-    loadBookSales(id)
-      .then(res => {
-        const body = res.data
-
-        const sales: SaleModel[] = Array.isArray(body) ? body : body.data
-
-        setSales(sales)
-      })
-      .catch(() => setSales([]))
-      .finally(() => setSalesLoading(false))
-  }, [id])
+    loadSales()
+  }, [id, loadClients, loadBooks, loadSales])
 
   const client = clients.find((c: ClientModel) => c.id === id)
 
@@ -73,6 +59,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
     setFirstName(client.firstName)
     setLastName(client.lastName)
     setEmail(client.email ?? '')
+    setPictureUrl(client.pictureUrl ?? '')
   }
 
   const onValidateEdit = () => {
@@ -80,6 +67,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
       firstName,
       lastName,
       email: email || undefined,
+      pictureUrl: pictureUrl || undefined,
     })
     setIsEditing(false)
   }
@@ -87,25 +75,29 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const resolveBook = (bookId: string): BookModel | undefined =>
     books.find((b: BookModel) => b.id === bookId)
 
+  const clientSales = sales.filter((s: SaleModel) => s.clientId === client.id)
+
   return (
     <Space
       direction="vertical"
       style={{
-          textAlign: 'left',
-          width: '95%',
-          maxWidth: '900px',
-          margin: '0 auto',
-          padding: '1.5rem',
-          backgroundColor: '#ffffff',
-          borderRadius: '12px',
-          boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)',
+        textAlign: 'left',
+        width: '95%',
+        maxWidth: '900px',
+        margin: '0 auto',
+        padding: '1.5rem',
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)',
       }}
     >
       <Link to={clientsRoute.to}>
         <ArrowLeftOutlined /> Back to clients
       </Link>
+
       <div
         style={{
+          display: 'flex',
           justifyContent: 'space-between',
           gap: '1rem',
           alignItems: 'flex-start',
@@ -151,10 +143,9 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
           )}
         </div>
 
-        {client.pictureUrl && (
+        {client.pictureUrl && !isEditing && (
           <div
             style={{
-              width: '100%',
               display: 'flex',
               justifyContent: 'center',
               marginBottom: '1rem',
@@ -198,54 +189,53 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
           )}
         </div>
       </div>
-      {salesLoading && sales.length === 0 ? (
+
+      {salesLoading && clientSales.length === 0 ? (
         <Skeleton active />
-      ) : sales.length > 0 ? (
+      ) : clientSales.length > 0 ? (
         <div style={{ marginTop: '1.5rem' }}>
           <Typography.Title level={4} style={{ marginBottom: '0.75rem' }}>
             Books bought by this client
           </Typography.Title>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            {sales
-              .filter((s: SaleModel) => s.clientId == client.id)
-              .map((s: SaleModel) => {
-                const book = resolveBook(s.bookId)
-                const label = book
-                  ? `${book.title} by ${book.author.firstName} ${book.author.lastName}`
-                  : `Book #${s.bookId}`
+            {clientSales.map((s: SaleModel) => {
+              const book = resolveBook(s.bookId)
+              const label = book
+                ? `${book.title} by ${book.author.firstName} ${book.author.lastName}`
+                : `Book #${s.bookId}`
 
-                return (
-                  <li
-                    key={s.id}
-                    style={{
-                      padding: '.5rem .75rem',
-                      marginBottom: '.5rem',
-                      borderRadius: '8px',
-                      backgroundColor: '#f9fafb',
-                      border: '1px solid #e5e7eb',
-                    }}
-                  >
-                    <div>
-                      <Link
-                        to="/books/$bookId"
-                        params={{ bookId: s.bookId }}
-                        style={{ color: '#1d4ed8', fontWeight: 500 }}
-                      >
-                        {label}
-                      </Link>
-                      <div
-                        style={{
-                          fontSize: '.85rem',
-                          color: '#4b5563',
-                          marginTop: '.25rem',
-                        }}
-                      >
-                        {new Date(s.saleDate).toLocaleDateString()}
-                      </div>
+              return (
+                <li
+                  key={s.id}
+                  style={{
+                    padding: '.5rem .75rem',
+                    marginBottom: '.5rem',
+                    borderRadius: '8px',
+                    backgroundColor: '#f9fafb',
+                    border: '1px solid #e5e7eb',
+                  }}
+                >
+                  <div>
+                    <Link
+                      to="/books/$bookId"
+                      params={{ bookId: s.bookId }}
+                      style={{ color: '#1d4ed8', fontWeight: 500 }}
+                    >
+                      {label}
+                    </Link>
+                    <div
+                      style={{
+                        fontSize: '.85rem',
+                        color: '#4b5563',
+                        marginTop: '.25rem',
+                      }}
+                    >
+                      {new Date(s.saleDate).toLocaleDateString()}
                     </div>
-                  </li>
-                )
-              })}
+                  </div>
+                </li>
+              )
+            })}
           </ul>
         </div>
       ) : null}

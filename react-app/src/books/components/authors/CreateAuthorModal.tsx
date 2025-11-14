@@ -21,8 +21,7 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
     setIsOpen(false)
   }
 
-  useEffect(() => {
-  }, [isOpen])
+  useEffect(() => {}, [isOpen])
 
   return (
     <>

@@ -18,18 +18,20 @@ function About() {
       <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>About Us</h1>
 
       <p style={{ fontSize: '1.1rem', color: '#475569' }}>
-        Welcome to our book community! We are passionate about connecting readers with
-        the authors and stories they love. Whether you are here to discover your next
-        favorite book, explore works from emerging authors, or simply learn more about
-        the literary world, our website is designed to make it easy and enjoyable.
+        Welcome to our book community! We are passionate about connecting
+        readers with the authors and stories they love. Whether you are here to
+        discover your next favorite book, explore works from emerging authors,
+        or simply learn more about the literary world, our website is designed
+        to make it easy and enjoyable.
       </p>
 
       <h2 style={{ marginTop: '2rem', fontSize: '1.5rem' }}>Our Mission</h2>
       <p style={{ fontSize: '1.1rem', color: '#475569' }}>
-        Our mission is to celebrate literature in all its forms. We provide a platform
-        where authors can showcase their work and readers can explore diverse genres,
-        gain insights into authors' journeys, and keep up with the latest book releases.
-        We believe in the power of stories to inspire, educate, and entertain.
+        Our mission is to celebrate literature in all its forms. We provide a
+        platform where authors can showcase their work and readers can explore
+        diverse genres, gain insights into authors' journeys, and keep up with
+        the latest book releases. We believe in the power of stories to inspire,
+        educate, and entertain.
       </p>
 
       <h2 style={{ marginTop: '2rem', fontSize: '1.5rem' }}>What We Offer</h2>
@@ -42,8 +44,9 @@ function About() {
       </ul>
 
       <p style={{ fontSize: '1.1rem', marginTop: '2rem', color: '#475569' }}>
-        We’re committed to fostering a vibrant, welcoming space for everyone who loves
-        books. Dive in, explore, and join us in celebrating the world of literature!
+        We’re committed to fostering a vibrant, welcoming space for everyone who
+        loves books. Dive in, explore, and join us in celebrating the world of
+        literature!
       </p>
     </div>
   )

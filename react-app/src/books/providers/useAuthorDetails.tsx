@@ -19,7 +19,7 @@ export const useAuthorDetails = (authorId: string) => {
       )
       .then(res => {
         const body = res.data
-        
+
         const parsed: AuthorModel = 'data' in body ? body.data : body
 
         setAuthor(parsed)
