@@ -15,18 +15,12 @@ import { useEffect } from 'react'
 interface ClientListItemProps {
   client: ClientModel
   onDelete: (id: string) => void
-  onUpdate: (id: string, input: UpdateClientModel) => void
 }
 
 export function ClientListItem({
   client,
   onDelete,
-  onUpdate,
 }: ClientListItemProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [firstName, setFirstName] = useState(client.firstName)
-  const [lastName, setLastName] = useState(client.lastName)
-  const [email, setEmail] = useState(client.email ?? '')
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const {sales, loadSales} = useSalesProvider();
 
@@ -34,17 +28,6 @@ export function ClientListItem({
     loadSales()
   }, [loadSales])
 
-  const onCancelEdit = () => {
-    setIsEditing(false)
-    setFirstName(client.firstName)
-    setLastName(client.lastName)
-    setEmail(client.email ?? '')
-  }
-
-  const onValidateEdit = () => {
-    onUpdate(client.id, { firstName, lastName, email })
-    setIsEditing(false)
-  }
   console.log("Sales in ClientListItem:", sales);
 
    const clientSales = sales.filter(
@@ -67,28 +50,15 @@ export function ClientListItem({
           boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
         }}
       >
-        <Col span={12} style={{ margin: 'auto 0' }}>
-          {isEditing ? (
-            <>
-              <Input
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                style={{ marginRight: '.25rem' }}
-                placeholder="First name"
-              />
-              <Input
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-                style={{ marginRight: '.25rem' }}
-                placeholder="Last name"
-              />
-              <Input
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Email (optional)"
-              />
-            </>
-          ) : (
+        <Col
+  span={12}
+  style={{
+    margin: 'auto 0',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',   // <-- space between name + total
+  }}
+><>
             <Link
               to="/clients/$clientId"
               params={{ clientId: client.id }}
@@ -100,16 +70,11 @@ export function ClientListItem({
               <span style={{ fontWeight: 'bold' }}>
                 {client.firstName} {client.lastName}
               </span>
-              {client.email ? (
-                <span style={{ marginLeft: '.5rem', color: '#555' }}>
-                  ({client.email})
-                </span>
-              ) : null}
+            
             </Link>
-          )}
           <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
                Total books bought: <strong>{clientSales}</strong>
-        </Typography.Text>
+        </Typography.Text></>
         </Col>
 
         <Col
@@ -122,20 +87,6 @@ export function ClientListItem({
             justifyContent: 'flex-end',
           }}
         >
-          {isEditing ? (
-            <>
-              <Button type="primary" onClick={onValidateEdit}>
-                <CheckOutlined />
-              </Button>
-              <Button onClick={onCancelEdit}>
-                <CloseOutlined />
-              </Button>
-            </>
-          ) : (
-            <Button type="primary" onClick={() => setIsEditing(true)}>
-              <EditOutlined />
-            </Button>
-          )}
           <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>
             <DeleteOutlined />
           </Button>

@@ -1,56 +1,27 @@
-import type { AuthorModel, UpdateAuthorModel } from '../../AuthorModel'
-import { useState } from 'react'
+import type { AuthorModel } from '../../AuthorModel'
 import { Link } from '@tanstack/react-router'
-import { Button, Col, Row, Input, Space } from 'antd'
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  EditOutlined,
-} from '@ant-design/icons'
-import { Modal } from 'antd'
+import { Button, Col, Row, Modal, Typography } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 import type { BookModel } from '../../BookModel'
-import { Typography } from 'antd'
+import { useState } from 'react'
 
 export interface AuthorListItemParams {
   author: AuthorModel
   books: BookModel[]
   onDelete: (id: string) => void
-  onUpdate: (id: string, input: UpdateAuthorModel) => void
 }
 
 export function AuthorListItem({
   author,
   books,
   onDelete,
-  onUpdate,
 }: AuthorListItemParams) {
-  const [firstName, setFirstName] = useState(author.firstName)
-  const [lastName, setLastName] = useState(author.lastName)
-  const [pictureUrl, setPictureUrl] = useState(author.pictureUrl ?? '')
-  const [isEditing, setIsEditing] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-
-  const onCancelEdit = () => {
-    setIsEditing(false)
-    setFirstName(author.firstName)
-    setLastName(author.lastName)
-    setPictureUrl(author.pictureUrl ?? '')
-  }
-
-  const onValidateEdit = () => {
-    onUpdate(author.id, {
-      firstName,
-      lastName,
-      pictureUrl: pictureUrl || undefined,
-    })
-    setIsEditing(false)
-  }
 
   const authorBooks = books.filter(
     book => book.author.id === author.id,
   ).length
-  
+
   return (
     <>
       <Row
@@ -67,50 +38,37 @@ export function AuthorListItem({
           boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
         }}
       >
-        <Col span={16} style={{ margin: 'auto 0' }}>
-          {isEditing ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '.5rem',
-                width: '100%',
-                maxWidth: '350px',
-              }}
-            >
-              <Input
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                placeholder="First Name"
-              />
-              <Input
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-                placeholder="Last Name"
-              />
-              <Input
-                value={pictureUrl}
-                onChange={e => setPictureUrl(e.target.value)}
-                placeholder="Picture URL (optional)"
-              />
-            </div>
-          ) : (
+        {/* LEFT: name + total written */}
+        <Col
+          span={12}
+          style={{
+            margin: 'auto 0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
+        >
+          <>
             <Link
-              to={`/authors/$authorId`}
+              to="/authors/$authorId"
               params={{ authorId: author.id }}
               style={{
                 margin: 'auto 0',
                 textAlign: 'left',
               }}
             >
-              <span style={{ fontWeight: 'bold' }}>{author.lastName}</span>
+              <span style={{ fontWeight: 'bold' }}>
+                {author.firstName} {author.lastName}
+              </span>
             </Link>
-          )}
-          <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
-               Total books written: <strong>{authorBooks}</strong>
-        </Typography.Text>
+
+            <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
+              Total books written: <strong>{authorBooks}</strong>
+            </Typography.Text>
+          </>
         </Col>
 
+        {/* RIGHT: delete button */}
         <Col
           span={4}
           style={{
@@ -118,27 +76,15 @@ export function AuthorListItem({
             display: 'flex',
             gap: '.25rem',
             margin: 'auto 0',
+            justifyContent: 'flex-end',
           }}
         >
-          {isEditing ? (
-            <>
-              <Button type="primary" onClick={onValidateEdit}>
-                <CheckOutlined />
-              </Button>
-              <Button onClick={onCancelEdit}>
-                <CloseOutlined />
-              </Button>
-            </>
-          ) : (
-            <Button type="primary" onClick={() => setIsEditing(true)}>
-              <EditOutlined />
-            </Button>
-          )}
           <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>
             <DeleteOutlined />
           </Button>
         </Col>
       </Row>
+
       <Modal
         open={isDeleteOpen}
         title="Delete author"

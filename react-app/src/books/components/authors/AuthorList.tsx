@@ -12,7 +12,6 @@ export function AuthorList() {
     loadAuthors,
     createAuthor,
     deleteAuthor,
-    updateAuthor,
   } = useBookAuthorsProviders()
 
   const { books, loadBooks } = useBookProvider()
@@ -33,9 +32,8 @@ export function AuthorList() {
             <AuthorListItem
               key={author.id}
               author={author}
-              books={books} // <-- pass all books here
+              books={books} 
               onDelete={deleteAuthor}
-              onUpdate={updateAuthor}
             />
           ))
         )}

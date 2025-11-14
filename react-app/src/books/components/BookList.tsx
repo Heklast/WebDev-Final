@@ -33,7 +33,6 @@ export function BookList() {
               key={book.id}
               book={book}
               onDelete={deleteBook}
-              onUpdate={updateBook}
             />
           ))
         )}
