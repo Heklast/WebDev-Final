@@ -9,10 +9,10 @@ interface CreateAuthorModalProps {
 }
 
 export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
 
   const onClose = () => {
     setFirstName('')

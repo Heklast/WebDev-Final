@@ -35,12 +35,12 @@ export const BookDetails = ({ id }: BookDetailsProps) => {
   const { authors, loadAuthors } = useBookAuthorsProviders()
 
   const [sales, setSales] = useState<SaleModel[]>([])
-  const [isSalesLoading, setSalesLoading] = useState(false)
+  const [isSalesLoading, setSalesLoading] = useState<boolean>(false)
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [title, setTitle] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
-  const [authorId, setAuthorId] = useState('')
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [title, setTitle] = useState<string>('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
+  const [authorId, setAuthorId] = useState<string>('')
   const [yearPublished, setYearPublished] = useState<number | undefined>(
     undefined,
   )

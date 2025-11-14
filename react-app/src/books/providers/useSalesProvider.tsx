@@ -4,7 +4,7 @@ import type { CreateSaleModel, SaleModel } from '../SaleModel'
 
 export const useSalesProvider = () => {
   const [sales, setSales] = useState<SaleModel[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const createSale = (input: CreateSaleModel) => {
     return axios.post('http://localhost:3000/sales', input)

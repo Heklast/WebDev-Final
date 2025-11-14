@@ -9,11 +9,11 @@ interface CreateClientModalProps {
 }
 
 export function CreateClientModal({ onCreate }: CreateClientModalProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
 
   const onClose = () => {
     setFirstName('')

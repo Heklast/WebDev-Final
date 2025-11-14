@@ -10,12 +10,12 @@ interface CreateBookModalProps {
 }
 
 export function CreateBookModal({ onCreate }: CreateBookModalProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [title, setTitle] = useState('')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [title, setTitle] = useState<string>('')
   const [yearPublished, setYearPublished] = useState(0)
-  const [authorId, setAuthorId] = useState('')
+  const [authorId, setAuthorId] = useState<string>('')
   const { authors, loadAuthors } = useBookAuthorsProviders()
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
 
   const onClose = () => {
     setTitle('')

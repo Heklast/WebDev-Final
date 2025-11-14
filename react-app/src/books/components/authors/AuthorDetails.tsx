@@ -22,13 +22,13 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
     useAuthorDetailsProvider(id)
   const { books, loadBooks } = useBookProvider()
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
 
   const { sales, loadSales, loadBookSales } = useSalesProvider()
-  const [averageSales, setAverageSales] = useState(0)
+  const [averageSales, setAverageSales] = useState<number>(0)
 
   useEffect(() => {
     loadAuthor()

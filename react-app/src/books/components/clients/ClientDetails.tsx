@@ -24,13 +24,13 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
   const { books, loadBooks } = useBookProvider()
 
   const [sales, setSales] = useState<SaleModel[]>([])
-  const [salesLoading, setSalesLoading] = useState(false)
+  const [salesLoading, setSalesLoading] = useState<boolean>(false)
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
 
   useEffect(() => {
     loadClients()
