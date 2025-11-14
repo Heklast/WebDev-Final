@@ -106,7 +106,6 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
       </Link>
       <div
         style={{
-          display: 'flex',
           justifyContent: 'space-between',
           gap: '1rem',
           alignItems: 'flex-start',
