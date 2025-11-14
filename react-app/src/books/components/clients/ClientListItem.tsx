@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
-import { Button, Col, Row, Modal, Input } from 'antd'
+import { Button, Col, Row, Modal, Input, Badge } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  ShoppingOutlined, // ✅ Add icon
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 
@@ -13,12 +14,14 @@ interface ClientListItemProps {
   client: ClientModel
   onDelete: (id: string) => void
   onUpdate: (id: string, input: UpdateClientModel) => void
+  purchaseCount: number // ✅ Add this prop
 }
 
 export function ClientListItem({
   client,
   onDelete,
   onUpdate,
+  purchaseCount, // ✅ Destructure it
 }: ClientListItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [firstName, setFirstName] = useState(client.firstName)
@@ -92,6 +95,18 @@ export function ClientListItem({
                   ({client.email})
                 </span>
               ) : null}
+              {/* ✅ Add purchase count display */}
+              <Badge
+                count={purchaseCount}
+                showZero
+                style={{
+                  marginLeft: '1rem',
+                  backgroundColor: purchaseCount > 0 ? '#7bbde1ff' : '#d9d9d9',
+                }}
+              />
+              <span style={{ marginLeft: '.5rem', color: '#888', fontSize: '0.9em' }}>
+                <ShoppingOutlined /> {purchaseCount} {purchaseCount === 1 ? 'book' : 'books'} purchased
+              </span>
             </Link>
           )}
         </Col>
@@ -127,7 +142,7 @@ export function ClientListItem({
       </Row>
       <Modal
         open={isDeleteOpen}
-        title="Delete author"
+        title="Delete client"
         onCancel={() => setIsDeleteOpen(false)}
         okText="Delete"
         cancelText="Cancel"
