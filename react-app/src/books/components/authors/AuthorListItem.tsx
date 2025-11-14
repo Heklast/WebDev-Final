@@ -16,11 +16,9 @@ export function AuthorListItem({
   books,
   onDelete,
 }: AuthorListItemParams) {
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false)
 
-  const authorBooks = books.filter(
-    book => book.author.id === author.id,
-  ).length
+  const authorBooks = books.filter(book => book.author.id === author.id).length
 
   return (
     <>
@@ -38,7 +36,6 @@ export function AuthorListItem({
           boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)',
         }}
       >
-   
         <Col
           span={12}
           style={{

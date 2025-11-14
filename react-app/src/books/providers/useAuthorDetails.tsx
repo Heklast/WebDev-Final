@@ -4,7 +4,7 @@ import type { AuthorModel } from '../AuthorModel'
 
 export const useAuthorDetails = (authorId: string) => {
   const [author, setAuthor] = useState<AuthorModel | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import type { BookModel, UpdateBookModel } from '../BookModel'
 import axios from 'axios'
 
 export const useBookDetailsProvider = (id: string) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [book, setBook] = useState<BookModel | null>(null)
 
   const loadBook = () => {

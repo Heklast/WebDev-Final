@@ -8,7 +8,7 @@ import type {
 
 export const useBookAuthorsProviders = () => {
   const [authors, setAuthors] = useState<AuthorModel[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const loadAuthors = () => {
     setLoading(true)

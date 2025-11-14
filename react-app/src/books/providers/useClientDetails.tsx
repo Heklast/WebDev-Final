@@ -4,7 +4,7 @@ import type { ClientModel } from '../ClientModel'
 
 export const useClientDetails = (clientId: string) => {
   const [client, setClient] = useState<ClientModel | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {

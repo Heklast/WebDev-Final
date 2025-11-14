@@ -29,11 +29,7 @@ export function BookList() {
           <Skeleton active />
         ) : (
           filteredBooks.map(book => (
-            <BookListItem
-              key={book.id}
-              book={book}
-              onDelete={deleteBook}
-            />
+            <BookListItem key={book.id} book={book} onDelete={deleteBook} />
           ))
         )}
       </div>

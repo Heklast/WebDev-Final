@@ -22,13 +22,13 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
     useAuthorDetailsProvider(id)
   const { books, loadBooks } = useBookProvider()
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [pictureUrl, setPictureUrl] = useState<string>('')
 
-  const { sales,loadSales, loadBookSales } = useSalesProvider()
-  const [averageSales, setAverageSales] = useState(0)
+  const { sales, loadSales, loadBookSales } = useSalesProvider()
+  const [averageSales, setAverageSales] = useState<number>(0)
 
   useEffect(() => {
     loadAuthor()
@@ -55,8 +55,7 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
         book => book.author.id === author.id,
       )
       const salesPerAuthor: SaleModel[] = sales.filter(sale =>
-        authorBooks.some(book => book.id === sale.bookId)
-        
+        authorBooks.some(book => book.id === sale.bookId),
       )
       console.log('salesPerAuthor:', salesPerAuthor)
       console.log('authorBooks:', authorBooks)
@@ -65,7 +64,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
         setAverageSales(0)
         return
       }
-      
 
       if (authorBooks.length === 0) {
         setAverageSales(0)
@@ -73,7 +71,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
       }
 
       try {
-
         setAverageSales(salesPerAuthor.length / authorBooks.length)
       } catch {
         setAverageSales(0)
@@ -201,8 +198,6 @@ export const AuthorDetails = ({ id }: AuthorDetailsProp) => {
             </Button>
           )}
         </div>
-
-        
 
         <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
           Average number of sales per book:{' '}

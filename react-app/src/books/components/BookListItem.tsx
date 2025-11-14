@@ -11,7 +11,7 @@ interface BookListItemProps {
 }
 
 export function BookListItem({ book, onDelete }: BookListItemProps) {
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false)
   const { sales, loadSales } = useSalesProvider()
 
   useEffect(() => {
@@ -54,11 +54,10 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
                 textAlign: 'left',
               }}
             >
-              <span style={{ fontWeight: 'bold' }}>
-                {book.title}
-              </span>
+              <span style={{ fontWeight: 'bold' }}>{book.title}</span>
               <span style={{ marginLeft: '.5rem', color: '#555' }}>
-                ({"by "}{book.author.firstName} {book.author.lastName})
+                ({'by '}
+                {book.author.firstName} {book.author.lastName})
               </span>
             </Link>
 

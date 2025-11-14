@@ -2,8 +2,8 @@ import { Typography, Input, Button, Space, Card } from 'antd'
 import { useState } from 'react'
 
 function App() {
-  const [name, setName] = useState('')
-  const [newName, setNewName] = useState('')
+  const [name, setName] = useState<string>('')
+  const [newName, setNewName] = useState<string>('')
 
   const onValidate = () => {
     setName(newName)

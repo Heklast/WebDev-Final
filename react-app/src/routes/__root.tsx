@@ -17,7 +17,7 @@ const RootLayout = () => (
 export const Route = createRootRoute({ component: RootLayout })
 
 //export const routeTree = rootRoute._addFileChildren({
-  //IndexRoute, // ✅ Default page
-  //clientsRoute,
-  //clientDetailsRoute,
+//IndexRoute, // ✅ Default page
+//clientsRoute,
+//clientDetailsRoute,
 //})

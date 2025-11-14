@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { UpdateAuthorModel } from '../AuthorModel'
 
 export const useAuthorDetailsProvider = (id: string) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [author, setAuthor] = useState<AuthorModel | null>(null)
 
   const loadAuthor = () => {

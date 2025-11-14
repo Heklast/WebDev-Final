@@ -6,13 +6,8 @@ import { CreateAuthorModal } from './CreateAuthorModal'
 import { Skeleton } from 'antd'
 
 export function AuthorList() {
-  const {
-    authors,
-    loading,
-    loadAuthors,
-    createAuthor,
-    deleteAuthor,
-  } = useBookAuthorsProviders()
+  const { authors, loading, loadAuthors, createAuthor, deleteAuthor } =
+    useBookAuthorsProviders()
 
   const { books, loadBooks } = useBookProvider()
 
@@ -32,7 +27,7 @@ export function AuthorList() {
             <AuthorListItem
               key={author.id}
               author={author}
-              books={books} 
+              books={books}
               onDelete={deleteAuthor}
             />
           ))

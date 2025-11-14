@@ -8,7 +8,7 @@ import type {
 
 export const useClientProvider = () => {
   const [clients, setClients] = useState<ClientModel[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const loadClients = useCallback(() => {
     setLoading(true)

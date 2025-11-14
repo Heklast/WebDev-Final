@@ -13,7 +13,7 @@ interface BookSalesModalProps {
 }
 
 export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
   const [clientId, setClientId] = useState<string>('')
   const [saleDate, setDate] = useState<Date | null>(null)
 

@@ -5,13 +5,8 @@ import { ClientListItem } from './ClientListItem'
 import { CreateClientModal } from './CreateClientModal'
 
 export function ClientList() {
-  const {
-    clients,
-    loading,
-    loadClients,
-    createClient,
-    deleteClient,
-  } = useClientProvider()
+  const { clients, loading, loadClients, createClient, deleteClient } =
+    useClientProvider()
 
   useEffect(() => {
     loadClients()

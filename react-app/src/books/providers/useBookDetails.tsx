@@ -4,7 +4,7 @@ import type { BookModel } from '../BookModel'
 
 export const useBookDetails = (bookId: string) => {
   const [book, setBook] = useState<BookModel | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {

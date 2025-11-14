@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const useBookProvider = () => {
   const [books, setBooks] = useState<BookModel[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const loadBooks = () => {
     setLoading(true)
