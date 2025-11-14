@@ -1,7 +1,7 @@
 import type { AuthorModel, UpdateAuthorModel } from '../../AuthorModel'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Button, Col, Row, Input } from 'antd'
+import { Button, Col, Row, Input, Space } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons'
 import { Modal } from 'antd'
 import type { BookModel } from '../../BookModel'
+import { Typography } from 'antd'
 
 export interface AuthorListItemParams {
   author: AuthorModel
@@ -46,9 +47,10 @@ export function AuthorListItem({
     setIsEditing(false)
   }
 
-  const authorBooksCount = books.filter(
+  const authorBooks = books.filter(
     book => book.author.id === author.id,
   ).length
+  
   return (
     <>
       <Row
@@ -104,6 +106,9 @@ export function AuthorListItem({
               <span style={{ fontWeight: 'bold' }}>{author.lastName}</span>
             </Link>
           )}
+          <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
+               Total books written: <strong>{authorBooks}</strong>
+        </Typography.Text>
         </Col>
 
         <Col
