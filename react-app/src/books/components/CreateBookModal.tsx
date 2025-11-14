@@ -3,6 +3,7 @@ import type { CreateBookModel } from '../BookModel'
 import { Button, Input, Modal, Select, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useBookAuthorsProviders } from '../providers/useBookAuthorsProviders'
+import { Typography } from 'antd'
 
 interface CreateBookModalProps {
   onCreate: (book: CreateBookModel) => void
@@ -56,12 +57,14 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
         title="Create Book"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text strong>Title</Typography.Text>
           <Input
             type="text"
             placeholder="Title"
             value={title}
             onChange={e => setTitle(e.target.value)}
           />
+          <Typography.Text strong>Author</Typography.Text>
           <Select
             style={{ width: '100%' }}
             options={authors.map(author => ({
@@ -70,12 +73,14 @@ export function CreateBookModal({ onCreate }: CreateBookModalProps) {
             }))}
             onChange={value => setAuthorId(value)}
           />
+          <Typography.Text strong>Year Published</Typography.Text>
           <Input
             type="number"
             placeholder="Year Published"
             value={yearPublished}
             onChange={e => setYearPublished(Number(e.target.value))}
           />
+          <Typography.Text strong>Picture URL (optional)</Typography.Text>
           <Input
             type="text"
             placeholder="Picture URL (optional)"

@@ -19,7 +19,6 @@ export function BookList() {
 
   return (
     <>
-      {/* Top bar: search on the left, create button on the right */}
       <div
         style={{
           display: 'flex',

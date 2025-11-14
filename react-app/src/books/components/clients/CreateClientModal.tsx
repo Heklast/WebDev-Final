@@ -36,7 +36,6 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
           const input: CreateClientModel = {
             firstName,
             lastName,
-            // if email is empty, omit it like other optional fields
             email: email || undefined,
           }
           onCreate(input)

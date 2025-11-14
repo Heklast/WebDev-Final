@@ -71,7 +71,7 @@ export function BookSalesModal({ bookId, onCreated }: BookSalesModalProps) {
           />
           <DatePicker
             style={{ width: '100%' }}
-            value={saleDate ? dayjs(saleDate) : null} // optional, if you want it controlled
+            value={saleDate ? dayjs(saleDate) : null}
             onChange={(date /* Dayjs | null */) => {
               setDate(date ? date.toDate() : null)
             }}

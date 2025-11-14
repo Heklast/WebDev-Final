@@ -67,7 +67,6 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
           </>
         </Col>
 
-        {/* RIGHT: delete button – same structure as ClientListItem */}
         <Col
           span={4}
           style={{
