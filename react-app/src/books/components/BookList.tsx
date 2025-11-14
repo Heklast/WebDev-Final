@@ -4,7 +4,7 @@ import { BookListItem } from './BookListItem'
 import { CreateBookModal } from './CreateBookModal'
 import { Input, Skeleton } from 'antd'
 export function BookList() {
-  const { books, loading, loadBooks, deleteBook, updateBook, createBook } =
+  const { books, loading, loadBooks, deleteBook, createBook } =
     useBookProvider()
 
   useEffect(() => {

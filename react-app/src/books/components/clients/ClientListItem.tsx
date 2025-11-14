@@ -1,11 +1,8 @@
 import { useState } from 'react'
-import type { ClientModel, UpdateClientModel } from '@/books/ClientModel'
-import { Button, Col, Row, Modal, Input } from 'antd'
+import type { ClientModel } from '@/books/ClientModel'
+import { Button, Col, Row, Modal } from 'antd'
 import {
-  CheckOutlined,
-  CloseOutlined,
   DeleteOutlined,
-  EditOutlined,
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Typography } from 'antd'
@@ -56,7 +53,7 @@ export function ClientListItem({
     margin: 'auto 0',
     display: 'flex',
     alignItems: 'center',
-    gap: '1rem',   // <-- space between name + total
+    gap: '1rem',  
   }}
 ><>
             <Link
