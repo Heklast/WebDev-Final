@@ -9,6 +9,9 @@ import {
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Modal } from 'antd'
+import { useSalesProvider } from '../providers/useSalesProvider'
+import { Typography } from 'antd'
+import { useEffect } from 'react'
 
 interface BookListItemProps {
   book: BookModel
@@ -21,6 +24,11 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
   const [pictureUrl, setPictureUrl] = useState(book.pictureUrl ?? '')
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const {sales, loadSales} = useSalesProvider();
+
+  useEffect(() => {
+    loadSales()
+  }, [loadSales])
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -32,6 +40,10 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
     onUpdate(book.id, { title, pictureUrl: pictureUrl || undefined })
     setIsEditing(false)
   }
+
+   const bookSales = sales.filter(
+    sale => sale.bookId === book.id,
+  ).length
 
   return (
     <>
@@ -82,6 +94,9 @@ export function BookListItem({ book, onDelete, onUpdate }: BookListItemProps) {
           by <span style={{ fontWeight: 'bold' }}>{book.author.firstName}</span>{' '}
           <span style={{ fontWeight: 'bold' }}>{book.author.lastName}</span>
         </Col>
+        <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
+               Total copies sold: <strong>{bookSales}</strong>
+        </Typography.Text>
         <Col
           span={3}
           style={{

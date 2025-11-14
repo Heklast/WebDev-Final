@@ -8,6 +8,9 @@ import {
   EditOutlined,
 } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
+import { Typography } from 'antd'
+import { useSalesProvider } from '../../providers/useSalesProvider'
+import { useEffect } from 'react'
 
 interface ClientListItemProps {
   client: ClientModel
@@ -25,6 +28,11 @@ export function ClientListItem({
   const [lastName, setLastName] = useState(client.lastName)
   const [email, setEmail] = useState(client.email ?? '')
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const {sales, loadSales} = useSalesProvider();
+
+  useEffect(() => {
+    loadSales()
+  }, [loadSales])
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -37,6 +45,11 @@ export function ClientListItem({
     onUpdate(client.id, { firstName, lastName, email })
     setIsEditing(false)
   }
+  console.log("Sales in ClientListItem:", sales);
+
+   const clientSales = sales.filter(
+    sale => sale.clientId === client.id,
+  ).length
 
   return (
     <>
@@ -94,6 +107,9 @@ export function ClientListItem({
               ) : null}
             </Link>
           )}
+          <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
+               Total books bought: <strong>{clientSales}</strong>
+        </Typography.Text>
         </Col>
 
         <Col
