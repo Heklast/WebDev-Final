@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import type { ClientModel } from '@/books/ClientModel'
 import { Button, Col, Row, Modal } from 'antd'
-import {
-  DeleteOutlined,
-} from '@ant-design/icons'
+import { DeleteOutlined } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Typography } from 'antd'
 import { useSalesProvider } from '../../providers/useSalesProvider'
@@ -14,22 +12,17 @@ interface ClientListItemProps {
   onDelete: (id: string) => void
 }
 
-export function ClientListItem({
-  client,
-  onDelete,
-}: ClientListItemProps) {
+export function ClientListItem({ client, onDelete }: ClientListItemProps) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  const {sales, loadSales} = useSalesProvider();
+  const { sales, loadSales } = useSalesProvider()
 
   useEffect(() => {
     loadSales()
   }, [loadSales])
 
-  console.log("Sales in ClientListItem:", sales);
+  console.log('Sales in ClientListItem:', sales)
 
-   const clientSales = sales.filter(
-    sale => sale.clientId === client.id,
-  ).length
+  const clientSales = sales.filter(sale => sale.clientId === client.id).length
 
   return (
     <>
@@ -48,14 +41,15 @@ export function ClientListItem({
         }}
       >
         <Col
-  span={12}
-  style={{
-    margin: 'auto 0',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',  
-  }}
-><>
+          span={12}
+          style={{
+            margin: 'auto 0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+          }}
+        >
+          <>
             <Link
               to="/clients/$clientId"
               params={{ clientId: client.id }}
@@ -67,11 +61,11 @@ export function ClientListItem({
               <span style={{ fontWeight: 'bold' }}>
                 {client.firstName} {client.lastName}
               </span>
-            
             </Link>
-          <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
-               Total books bought: <strong>{clientSales}</strong>
-        </Typography.Text></>
+            <Typography.Text style={{ fontSize: '1rem', color: '#475569' }}>
+              Total books bought: <strong>{clientSales}</strong>
+            </Typography.Text>
+          </>
         </Col>
 
         <Col

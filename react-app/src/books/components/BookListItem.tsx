@@ -54,11 +54,10 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
                 textAlign: 'left',
               }}
             >
-              <span style={{ fontWeight: 'bold' }}>
-                {book.title}
-              </span>
+              <span style={{ fontWeight: 'bold' }}>{book.title}</span>
               <span style={{ marginLeft: '.5rem', color: '#555' }}>
-                ({"by "}{book.author.firstName} {book.author.lastName})
+                ({'by '}
+                {book.author.firstName} {book.author.lastName})
               </span>
             </Link>
 
@@ -73,9 +72,9 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
           span={4}
           style={{
             display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-  paddingRight: '1.25rem',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            paddingRight: '1.25rem',
           }}
         >
           <Button type="primary" danger onClick={() => setIsDeleteOpen(true)}>

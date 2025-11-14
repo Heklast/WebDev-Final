@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useMatchRoute } from '@tanstack/react-router'
 import { Route as indexRoute } from './routes/index'
 import { Route as aboutRoute } from './routes/about'
 import { Route as booksRoute } from './routes/books'
@@ -18,6 +18,27 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const matchRoute = useMatchRoute()
+
+  const isBooks = !!matchRoute({ to: '/books', fuzzy: true })
+  const isAuthors = !!matchRoute({ to: '/authors', fuzzy: true })
+  const isClients = !!matchRoute({ to: '/clients', fuzzy: true })
+  const isAbout = !!matchRoute({ to: '/about', fuzzy: true })
+  const isHome = !!matchRoute({ to: '/', fuzzy: false })
+
+  let selectedKey: string = 'home'
+  if (isBooks) {
+    selectedKey = 'books'
+  } else if (isAuthors) {
+    selectedKey = 'authors'
+  } else if (isClients) {
+    selectedKey = 'clients'
+  } else if (isAbout) {
+    selectedKey = 'about'
+  } else if (isHome) {
+    selectedKey = 'home'
+  }
+
   const items: Required<MenuProps>['items'] = [
     {
       label: <Link to={indexRoute.to}>Home</Link>,
@@ -65,7 +86,7 @@ export function Layout({ children }: LayoutProps) {
         <h2 style={{ marginTop: '0', padding: '0.75rem 1rem' }}>
           Babel&apos;s Library
         </h2>
-        <Menu mode="horizontal" items={items} />
+        <Menu mode="horizontal" items={items} selectedKeys={[selectedKey]} />
       </div>
       <div
         style={{

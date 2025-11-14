@@ -1,10 +1,9 @@
+import { useState } from 'react'
 import axios from 'axios'
 import type { CreateSaleModel, SaleModel } from '../SaleModel'
-import { useState } from 'react'
-import type { BookModel } from '../BookModel'
 
 export const useSalesProvider = () => {
-  const [sales, setSales] = useState<SaleModel[]>([]) //breytti BookModel í SaleModel
+  const [sales, setSales] = useState<SaleModel[]>([])
   const [loading, setLoading] = useState(false)
 
   const createSale = (input: CreateSaleModel) => {
@@ -23,10 +22,10 @@ export const useSalesProvider = () => {
   }
 
   const loadBookSales = (bookId: string) => {
-    const id = bookId
     return axios.get<SaleModel[] | { data: SaleModel[] }>(
-      `http://localhost:3000/sales?bookId/sales`,
+      `http://localhost:3000/books/${bookId}/sales`,
     )
   }
-  return { sales, loadSales, createSale, loadBookSales }
+
+  return { sales, loading, loadSales, createSale, loadBookSales }
 }
